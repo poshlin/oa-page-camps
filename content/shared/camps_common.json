@@ -17,5 +17,6 @@
   },
   "registration_url": "/camps/registration",
   "base_path": "/camps",
-  "_base_path_why": "正式站把這個 repo 掛在 /camps 底下，所以資產是 /camps/assets/…。預覽站在 GitHub Pages 的 /oa-page-camps/ 底下，用 OA_BASE=/oa-page-camps 覆蓋。兩邊都是根絕對路徑，不受尾斜線影響（用 ../assets 就會被尾斜線綁死）。"
+  "_base_path_why": "正式站把這個 repo 掛在 /camps 底下，所以資產是 /camps/assets/…。預覽站在 GitHub Pages 的 /oa-page-camps/ 底下，用 OA_BASE=/oa-page-camps 覆蓋。兩邊都是根絕對路徑，不受尾斜線影響（用 ../assets 就會被尾斜線綁死）。",
+  "season_word": "寒假"
 }

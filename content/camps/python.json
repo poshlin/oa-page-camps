@@ -1,0 +1,22 @@
+{
+  "slug": "python",
+  "name": "Python 遊戲體驗營",
+  "body": "python.html",
+  "meta": {
+    "title": "{{SEASON_SHORT}} Python {{SEASON_TYPE}}｜橘子蘋果遊戲實戰營｜接軌 AI 時代",
+    "description": "為孩子規劃{{SEASON}}，學習接軌 AI 時代的第一語言。橘子蘋果 Python 遊戲實戰營帶孩子從零基礎到親手做出多款遊戲，把抽象語法變成看得見的成果。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "Python 遊戲體驗營",
+      "grade": "國小高年級至國中",
+      "description": "從零基礎開始，用 Python 親手打造多款遊戲，把抽象語法化為具體成果。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [],
+    "must_contain": [
+      "Python"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "gai",
+  "name": "AI 創意實戰營",
+  "body": "gai.html",
+  "meta": {
+    "title": "AI 創意實戰營｜橘子蘋果｜從 AI 原理到親手架設個人網站",
+    "description": "從認識 AI 背後的原理、實際操作多款 AI 工具，到親手架設個人網站。孩子透過動手做擁抱新科技、培養資訊素養，把 AI 靈活運用在日常生活中。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "AI 創意實戰營",
+      "grade": "國小五年級至國中",
+      "description": "從 AI 原理、AI 工具實作到親手架設個人網站，培養孩子的資訊素養。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [
+      "10,990",
+      "15,000",
+      "4,000",
+      "晚鳥",
+      "領取優惠"
+    ],
+    "must_contain": [
+      "AI"
+    ],
+    "must_not_link": [
+      "/camps/registration"
+    ],
+    "_why": "本季不開（gai 完全不開、apcs 只開線上），頁面不得再出現任何優惠、價格或報名承諾——但頁面要保留、不 noindex 也不 301，排名是多年資產。"
+  }
+}

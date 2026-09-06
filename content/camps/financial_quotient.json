@@ -1,0 +1,23 @@
+{
+  "slug": "financial_quotient",
+  "name": "財商數學創客營",
+  "body": "financial_quotient.html",
+  "meta": {
+    "title": "{{SEASON_SHORT}} 兒童理財{{SEASON_TYPE}}｜橘子蘋果財商數學創客營｜限時晚鳥優惠",
+    "description": "想為孩子規劃一個充實的{{SEASON}}嗎？橘子蘋果「財商數學創客營」把理財、數學與動手做結合：孩子親手打造夢想商店，在遊戲中學預算與儲蓄，讓數學活起來。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "財商數學創客營",
+      "grade": "國小三年級至六年級",
+      "description": "把理財觀念與數學結合，透過打造夢想商店的實作，學習預算、定價與儲蓄。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [],
+    "must_contain": [
+      "財商",
+      "理財"
+    ]
+  }
+}

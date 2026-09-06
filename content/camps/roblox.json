@@ -1,0 +1,32 @@
+{
+  "slug": "roblox",
+  "name": "Roblox 營隊",
+  "body": "roblox.html",
+  "meta": {
+    "title": "{{SEASON_SHORT}} Roblox {{SEASON_TYPE}}｜橘子蘋果遊戲設計營｜打造你的元宇宙遊戲",
+    "description": "想讓孩子在{{SEASON}}將遊戲熱情化為創造力嗎？橘子蘋果 Roblox 遊戲設計營，帶孩子學 3D 場景建構與遊戲腳本，做出自己的元宇宙遊戲；勇闖地下城營隊則把數學、語文、自然變成關卡。國小三到六年級、無經驗可參加。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "Roblox 遊戲設計營",
+      "grade": "國小三年級至六年級",
+      "description": "透過 Roblox Studio 學習遊戲設計，課程包含跑酷遊戲設計與關卡場景設計，並有實作與成果發表。"
+    },
+    {
+      "name": "Roblox 勇闖地下城營隊",
+      "grade": "國小五年級至六年級（小三、小四需先上過 Roblox 遊戲設計營）",
+      "description": "透過 Roblox Studio 結合遊戲設計與多學科學習，創作涵蓋數學、語文、自然科學的知識關卡。"
+    }
+  ],
+  "expect": {
+    "_why": "這一季兩個 Roblox 營隊都有開，沒有要移除的內容，所以 must_not_contain 是空的。",
+    "must_not_contain": [],
+    "must_contain": [
+      "遊戲設計營",
+      "勇闖地下城",
+      "Roblox Studio"
+    ],
+    "price_groups": 2,
+    "rwd_dual_html": true
+  }
+}

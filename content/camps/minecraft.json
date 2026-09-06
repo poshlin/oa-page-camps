@@ -21,16 +21,16 @@
   "not_running_assets": {
     "_why": "🔴 未開課營隊的『圖片型』內容。文字檢查抓不到圖片，2026-09-06 就是靠這份清單才發現手機版材質營標題圖還在。移除某個營隊時，它的專屬圖檔要一併列進來。",
     "files": [
-      "b_5_icon.png",
-      "b_button_2.png",
-      "b_button_4.png",
-      "b_m_icon_3h.png"
+      "minecraft/b_5_icon.png",
+      "minecraft/b_button_2.png",
+      "minecraft/b_button_4.png",
+      "minecraft/b_m_icon_3h.png"
     ],
     "labels": {
-      "b_5_icon.png": "桌機版 材質模組設計營 區塊標題圖",
-      "b_button_2.png": "桌機／手機版 進階班課表 按鈕底圖",
-      "b_button_4.png": "桌機／手機版 材質營課表 按鈕底圖",
-      "b_m_icon_3h.png": "手機版 材質模組設計營 區塊標題圖（無 alt，純圖片）"
+      "minecraft/b_5_icon.png": "桌機版 材質模組設計營 區塊標題圖",
+      "minecraft/b_button_2.png": "桌機／手機版 進階班課表 按鈕底圖",
+      "minecraft/b_button_4.png": "桌機／手機版 材質營課表 按鈕底圖",
+      "minecraft/b_m_icon_3h.png": "手機版 材質模組設計營 區塊標題圖（無 alt，純圖片）"
     }
   },
   "comparison": {
@@ -89,15 +89,40 @@
   },
   "pinned_assets": {
     "_why": "🔴 內容畫在圖裡的素材：改文案改不到，只能改圖。這裡釘住尺寸，萬一有人把原圖覆蓋回去，npm test 會擋下來。",
-    "b_7_icon.png": {
+    "minecraft/b_7_icon.png": {
       "w": 1222,
       "h": 880,
       "note": "桌機版學員好評，4 則（原圖 1035 高、含國中七年級那則，已移除）"
     },
-    "b_m_icon_4.png": {
+    "minecraft/b_m_icon_4.png": {
       "w": 896,
       "h": 1162,
       "note": "手機版學員好評，4 則（原圖 1458 高）"
     }
+  },
+  "expect": {
+    "_why": "每頁自己的驗收條件。must_not_contain＝本季未開課的字樣（對外承諾錯誤，出現一次就是事故）；must_contain＝搬家時最容易被誤刪的內容；price_groups＝價格區塊應有幾組【】。",
+    "must_not_contain": [
+      "材質模組設計營",
+      "進階程式創客營",
+      "進階班",
+      "進階須上過",
+      "全台唯一麥塊教育版",
+      "參加過初階班",
+      "4~7 年級",
+      "小三到國一"
+    ],
+    "must_contain": [
+      "麥塊程式創客營",
+      "影片創作營",
+      "初階班課表",
+      "麥塊影片營課表",
+      "小三到小六"
+    ],
+    "price_groups": 2,
+    "stage_codes_removed": [
+      "mctexture"
+    ],
+    "rwd_dual_html": true
   }
 }

@@ -1,0 +1,36 @@
+.head {
+  background-image: url(../assets/financial_quotient/bn-bg.png);
+  background-size: contain;
+  background-color: #daf3ff;
+}
+.head-mobile-image {
+  background-image: url(../assets/financial_quotient/bn-bg-phone.png);
+  background-size: contain;
+  background-color: #daf3ff;
+}
+.section-1 {
+  background-image: url(../assets/financial_quotient/section1.png);
+  background-size: contain;
+}
+.section-2 {
+  background-image: url(../assets/financial_quotient/section2.png);
+  background-size: contain;
+}
+.section-3 {
+  background-image: url(../assets/financial_quotient/section3.png);
+  background-size: contain;
+}
+.section-4 {
+  background-image: url(../assets/financial_quotient/s4-bg-cloud.png);
+  background-size: contain;
+}
+.section-4-mobile {
+  background-image: url(../assets/financial_quotient/s4-bg-cloud-phone.png);
+  background-size: contain;
+}
+.section-bg {
+  background-image: url(../assets/financial_quotient/textcloud.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.video{aspect-ratio:16 / 9}.video iframe{border-radius:10px}.section-1-mobile,.section-2-mobile,.section-3-mobile{background-color:#bfeddf}.section-4-mobile{aspect-ratio:39 / 9}.section-bg{aspect-ratio:14 / 9;padding-top:3rem;padding-left:3rem;padding-right:3rem}.head-mobile-image{aspect-ratio:431 / 389}@media (min-width: 360px){.section-bg{padding-top:0rem;padding-left:1rem;padding-right:1rem}.head-mobile{padding-top:4rem}.head-mobile .title-eng{font-weight:50;font-size:1.3rem;margin-bottom:10px}.head-mobile .title-cht{font-weight:bold;line-height:48px;font-size:40px;margin-bottom:20px}.head-mobile .title-detail{font-weight:500;line-height:.6rem;font-size:1.1rem;margin-bottom:20px}}@media (min-width: 375px){.section-bg{padding-top:1.5rem;padding-left:2rem;padding-right:2rem}.head-mobile{padding-top:4rem}.head-mobile .title-eng{font-weight:50;font-size:1.3rem;margin-bottom:10px}.head-mobile .title-cht{font-weight:bold;line-height:48px;font-size:40px;margin-bottom:20px}.head-mobile .title-detail{font-weight:500;line-height:.6rem;font-size:1.2rem;margin-bottom:20px}}@media (min-width: 576px){.section-4-mobile{height:120px}.section-bg{height:339px;padding-top:3rem;padding-left:3rem;padding-right:3rem}}@media (min-width: 768px){.head,.section-1,.section-2,.section-3{height:289px}.section-1 .row,.section-2 .row,.section-3 .row{padding-top:2rem}.section-1 .row .section-bg,.section-2 .row .section-bg,.section-3 .row .section-bg{height:235px;padding-top:0.5rem;padding-left:0.5rem;padding-right:0.5rem}.section-1 .row h3,.section-2 .row h3,.section-3 .row h3{padding-bottom:0.5rem;font-size:20px;line-height:28px}.section-1 .row p,.section-2 .row p,.section-3 .row p{font-size:16px;line-height:23px}.section-1 .row .section-image-1,.section-2 .row .section-image-1,.section-3 .row .section-image-1{padding-top:3rem}.section-4{height:77px}.title-eng{margin-top:60px;font-weight:bold;font-size:1rem}.title-cht{font-weight:bold;line-height:46px;font-size:30px;margin-bottom:10px}.title-detail{font-weight:500;line-height:1.2;font-size:0.8rem}.title-button{margin-top:20px;width:160px}}@media (min-width: 992px){.head,.section-1,.section-2,.section-3{height:389px}.section-1 .row,.section-2 .row,.section-3 .row{padding-top:4rem}.section-1 .row .section-bg,.section-2 .row .section-bg,.section-3 .row .section-bg{height:305px;padding-top:2rem;padding-left:3rem;padding-right:3rem}.section-1 .row h3,.section-2 .row h3,.section-3 .row h3{padding-bottom:0.5rem}.section-1 .row p,.section-2 .row p,.section-3 .row p{line-height:27px}.section-1 .row .section-image-1,.section-2 .row .section-image-1,.section-3 .row .section-image-1{padding-top:4rem}.section-4{height:104px}.title-eng{margin-top:60px;font-weight:bold;font-size:1.2rem}.title-cht{font-weight:bold;line-height:46px;font-size:36px;margin-bottom:10px}.title-detail{font-weight:500;line-height:1.5;font-size:1rem}.title-button{margin-top:20px;width:200px}}@media (min-width: 1200px){.head,.section-1,.section-2,.section-3{height:464px}.section-1 .row,.section-2 .row,.section-3 .row{padding-top:4rem}.section-1 .row .section-bg,.section-2 .row .section-bg,.section-3 .row .section-bg{height:365px;padding-top:2.5rem;padding-left:3.5rem;padding-right:3.5rem}.section-1 .row h3,.section-2 .row h3,.section-3 .row h3{padding-bottom:1rem}.section-1 .row p,.section-2 .row p,.section-3 .row p{line-height:35px}.section-1 .row .section-image-1,.section-2 .row .section-image-1,.section-3 .row .section-image-1{padding-top:4rem}.section-4{height:124px}.title-eng{margin-top:60px;font-weight:bold;font-size:1.5rem}.title-cht{font-weight:bold;line-height:56px;font-size:48px;margin-bottom:20px}.title-detail{font-weight:500;line-height:1.5;font-size:1.25rem}.title-button{margin-top:20px}}@media (min-width: 1400px){.head,.section-1,.section-2,.section-3{height:539px}.section-1 .row,.section-2 .row,.section-3 .row{padding-top:4rem}.section-1 .row .section-bg,.section-2 .row .section-bg,.section-3 .row .section-bg{height:415px;padding-top:4rem;padding-left:5rem;padding-right:5rem}.section-1 .row h3,.section-2 .row h3,.section-3 .row h3{padding-bottom:1rem}.section-1 .row p,.section-2 .row p,.section-3 .row p{line-height:40px}.section-1 .row .section-image-1,.section-2 .row .section-image-1,.section-3 .row .section-image-1{padding-top:4rem}.section-4{height:144px}.title-eng{margin-top:80px;font-weight:bold;font-size:1.5rem}.title-cht{font-weight:bold;line-height:56px;font-size:48px;margin-bottom:20px}.title-detail{font-weight:500;line-height:1.5;font-size:1.25rem}.title-button{margin-top:20px}}.text-light-blue{color:#0096ce}

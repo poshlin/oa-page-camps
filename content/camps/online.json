@@ -1,0 +1,23 @@
+{
+  "slug": "online",
+  "name": "線上 APCS 檢定培訓營",
+  "body": "online.html",
+  "meta": {
+    "title": "{{SEASON_SHORT}} APCS 線上{{SEASON_TYPE}}｜橘子蘋果｜在家跟名師系統化衝刺",
+    "description": "想利用{{SEASON}}衝刺 APCS 嗎？橘子蘋果「線上 APCS 檢定培訓營」不受地點限制，在家就能跟著老師系統化學觀念與實作題，小班制直播互動、進度不落後。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "線上 APCS 檢定培訓營",
+      "grade": "國中至高中",
+      "description": "線上直播小班制，系統化學習 APCS 觀念與實作題，不受地點限制。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [],
+    "must_contain": [
+      "APCS",
+      "線上"
+    ]
+  }
+}

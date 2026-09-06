@@ -1,0 +1,46 @@
+h2, h1, p {
+  margin: 15px 0;
+}
+p {
+  line-height: 1.5rem;
+  color: #444444
+}
+.bg-blue {
+  background-color: #2862ffff;
+  a {
+    color: #cdffcc;
+  }
+}
+.apcs-blockquote {
+  font-size:1em;
+  color:#666;
+  border-left-width: 0;
+  position: relative;
+}
+.apcs-blockquote:before,
+.apcs-blockquote:after {
+  content: "";
+  background-size: contain;
+  position: absolute;
+  width: 25px;
+  height: 15px;
+}
+.apcs-blockquote:before {
+  background-image: url(../assets/_site/courses/apcs/APCS-image-01.png);
+  top: 0;
+  left: 0;
+}
+.apcs-blockquote:after {
+  background-image: url(../assets/_site/courses/apcs/APCS-image-01.png);
+  right: 0;
+  bottom: 0;
+}
+
+.banner.apcs {
+  background-image: url(../assets/_site/campaigns/apcs/banner-desktop.jpg);
+}
+@media (max-width: 767.98px) {
+  .banner.apcs {
+    background-image: url(../assets/_site/campaigns/apcs/banner-mobile.jpg);
+  }
+}

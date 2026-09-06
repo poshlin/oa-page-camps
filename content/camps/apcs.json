@@ -1,0 +1,33 @@
+{
+  "slug": "apcs",
+  "name": "APCS 檢定培訓營",
+  "body": "apcs.html",
+  "meta": {
+    "title": "APCS 檢定培訓營｜橘子蘋果｜新制 APCS 觀念與 Python 解題實作",
+    "description": "掌握新制 APCS 檢定方向，系統學習 Python 演算法與實作技巧，累積程式實力與升學競爭力。本季實體教室沒有安排梯次，線上梯次持續開課。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "APCS 檢定培訓營",
+      "grade": "國中至高中",
+      "description": "針對 APCS 檢定的觀念與實作題型，系統學習 Python 演算法與解題技巧。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [
+      "15,490",
+      "15,990",
+      "20,000",
+      "加購 APCS 進階班",
+      "晚鳥",
+      "領取優惠"
+    ],
+    "must_contain": [
+      "APCS"
+    ],
+    "must_not_link": [
+      "/camps/registration"
+    ],
+    "_why": "本季不開（gai 完全不開、apcs 只開線上），頁面不得再出現任何優惠、價格或報名承諾——但頁面要保留、不 noindex 也不 301，排名是多年資產。"
+  }
+}

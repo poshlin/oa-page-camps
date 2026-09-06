@@ -1,0 +1,8 @@
+.text-purple{color:#9F8DC1}.dialog-box{margin-top:-80px}.dialog-box .right:before,.dialog-box .left:before{content:'';width:15px;height:15px;position:absolute;top:50%;transform:translateY(-50%) rotate(45deg);z-index:-1}.dialog-box .right:before{background-color:#b7e2f9;right:-7px}.dialog-box .left:before{background-color:#fbdad2;left:-7px}.dialog-box .right,.dialog-box .left{display:inline-block;position:relative;border-radius:10px;padding:10px}.dialog-box .right{background-color:#b7e2f9}.dialog-box .left{background-color:#fbdad2}@media (max-width: 768px){.row{margin-right:0;margin-left:0}.dialog-box{margin-top:0px !important}.col-md-6.image-remove-padding{padding-right:0;padding-left:0}}
+table.fancy-table tr:nth-child(2n+1) td {
+  background-color: #ffffffb5 !important;
+}
+table.fancy-table th,
+table.fancy-table tr:nth-child(2n) td {
+  background-color: #f0f8ffc4 !important;
+}

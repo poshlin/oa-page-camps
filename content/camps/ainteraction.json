@@ -1,0 +1,24 @@
+{
+  "slug": "ainteraction",
+  "name": "AI 互動藝術營",
+  "body": "ainteraction.html",
+  "meta": {
+    "title": "{{SEASON_SHORT}} AI {{SEASON_TYPE}}｜橘子蘋果 AI 互動藝術營｜啟發孩子的未來創造力",
+    "description": "想讓孩子在{{SEASON}}提前掌握未來的關鍵能力嗎？橘子蘋果「AI 互動藝術營」帶孩子學影像辨識、學會與 AI 溝通，親手做出能互動的智慧專案。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "AI 互動藝術營",
+      "grade": "國中一年級至高中三年級",
+      "description": "學習影像辨識與 AI 互動設計，親手打造能與人互動的智慧藝術專案。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [
+      "AI 互動創作營"
+    ],
+    "must_contain": [
+      "AI 互動藝術營"
+    ]
+  }
+}

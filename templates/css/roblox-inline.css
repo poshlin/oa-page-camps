@@ -1,0 +1,88 @@
+.section-1 {
+  background-image: url(../assets/roblox/title-1.webp);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  aspect-ratio: 2000 / 1170;
+  width: 100%;
+}
+.section-title {
+  background-image: url(../assets/roblox/title-2.webp);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 2000 / 337;
+}
+.section-3-title {
+  background-image: url(../assets/roblox/section-3-title.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 1440 / 600;
+}
+
+.left-area {
+  background-image: url(../assets/roblox/left-area.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 600 / 360;
+}
+.left-area-phone {
+  background-image: url(../assets/roblox/left-area-phone.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 383 / 260;
+}
+.right-area {
+  background-image: url(../assets/roblox/right-area.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 600 / 360;
+}
+.right-area-phone {
+  background-image: url(../assets/roblox/right-area-phone.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 383 / 260;
+}
+.section-5-content {
+  background-image: url(../assets/roblox/section-5-content.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 1276 / 550;
+  padding: 30px;
+}
+.section-5-1 {
+  background-image: url(../assets/roblox/section-5-1.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 433 / 500;
+}
+.section-5-2 {
+  background-image: url(../assets/roblox/section-5-2.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 433 / 500;
+}
+.section-5-3 {
+  background-image: url(../assets/roblox/section-5-3.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 433 / 500;
+}
+.section-6-content {
+  background-image: url(../assets/roblox/section-6-content.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 1440 / 463;
+}
+.section-6-right {
+  background-image: url(../assets/roblox/section-6-right.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 720 / 463;
+}
+.section-6-left {
+  background-image: url(../assets/roblox/section-6-left.png);
+  background-repeat: no-repeat;
+  background-size: 100% ;
+  aspect-ratio: 720 / 463;
+}
+.wrap-text{width:100%;white-space:normal;overflow-wrap:break-word;word-wrap:break-word}.nowrap{white-space:nowrap}.section-1.d-md-block{position:relative}.section-1.d-md-block .text-center{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);width:100%}.section-1 .title{font-family:'Arial Black', 'Helvetica Neue', sans-serif;font-weight:900;font-size:3.5rem;color:#fff;text-shadow:0 0 0 #1a365d,0 0 0 #1a365d,0 0 0 #1a365d,0 0 0 #1a365d,0 0 0 #1a365d,0 0 0 #1a365d,0 0 0 #1a365d,0 0 0 #1a365d,3px 0 0 #1a365d,2.83px 1.17px 0 #1a365d,2.31px 2.16px 0 #1a365d,1.41px 2.74px 0 #1a365d,0 3px 0 #1a365d,-1.41px 2.74px 0 #1a365d,-2.31px 2.16px 0 #1a365d,-2.83px 1.17px 0 #1a365d,-3px 0 0 #1a365d,-2.83px -1.17px 0 #1a365d,-2.31px -2.16px 0 #1a365d,-1.41px -2.74px 0 #1a365d,0 -3px 0 #1a365d,1.41px -2.74px 0 #1a365d,2.31px -2.16px 0 #1a365d,2.83px -1.17px 0 #1a365d,0 0 8px rgba(0,0,0,0.5);letter-spacing:2px;text-transform:uppercase;line-height:1.1}.section-1 .title .year{color:#ffa402}@media (max-width: 1200px){.section-1 .title{font-size:3rem}}@media (max-width: 992px){.section-1 .title{font-size:2.5rem}}@media (max-width: 768px){.section-1 .title{font-size:2rem}}.section-1 .roblox-btn{padding:10px 20px;font-size:1.4rem;color:#ffe25a;background:linear-gradient(180deg, #0e5a8a 0%, #036 100%);border:3px solid #fff;border-radius:999px;text-decoration:none;box-shadow:0 4px 0 0 #3a6fa1,0 0 0 4px rgba(0,151,255,0);text-shadow:1px 2px 4px #0008;letter-spacing:2px;transition:transform 0.1s;cursor:pointer;outline:none;display:inline-block}.section-1 .roblox-btn:hover{box-shadow:0 2px 0 0 #3a6fa1, 0 0 0 6px #b3e0ff}.text-deep-green{color:#427732}.text-blue{color:#2862ff}.left-bar{border-left:3px solid #ffb425;padding-left:10px}.compare .head{text-align:center;font-size:2rem}.compare .type{text-align:center;font-size:1.2rem;height:80px}.compare td,.compare th{border-color:#31a858;border-style:solid;border-width:2px;vertical-align:middle}.w-65{width:65% !important}h2 img{width:48px}.video{aspect-ratio:16 / 9}.video iframe{border-radius:30px}.star-area-1{position:relative;background-color:#76b861;border-radius:20px;border-bottom:#568e43 4px solid}.star-area-1 hr{border-top:4px solid;opacity:1}.star-area-1 .star-icon-area{position:absolute;width:100%;top:-50px}.star-area-1 .star-icon-area .star-icon{width:100px}.star-area-1 .star-area-2{padding:20px;padding-top:60px}@media (max-width: 767px){body,html{margin:0 !important;padding:0 !important;overflow-x:hidden}.container{padding-left:0 !important;padding-right:0 !important;margin-left:0 !important;margin-right:0 !important;max-width:100% !important}.star-area-1{margin-left:20px;margin-right:20px;margin-bottom:20px}}.could{background-color:#fff;padding:70px;border-radius:120px}@media (max-width: 1199px){.hexagon-outer{width:150px !important;height:170px !important}.hexagon-inner{width:140px !important;height:160px !important;padding:10px 10px 10px 10px !important}.hexagon-inner .hex-middle{font-size:.9rem !important}}@media (max-width: 991px){.hexagon-outer{width:130px !important;height:150px !important}.hexagon-inner{width:120px !important;height:140px !important;padding:10px 10px 10px 10px !important}.hexagon-inner .hex-middle{font-size:.9rem !important}.section-5-content h3{font-size:.9rem;line-height:18px}.section-5-content p{font-size:15px;line-height:18px}}@media (max-width: 767px){.section-1 .roblox-btn{padding:3px 10px;font-size:.8rem;margin-top:50px}section.section-camp-info{padding-left:15px !important;padding-right:15px !important}section.section-camp-info turbo-frame{padding-left:15px !important;padding-right:15px !important}}@media (max-width: 576px){.section-1 .title{font-size:30px;padding-top:50px}h2 img{width:36px !important}.px-sm-3{padding-left:.2rem !important;padding-right:.2rem !important}.hexagon-outer{width:110px !important;height:130px !important}.hexagon-inner{width:100px !important;height:120px !important;padding:10px 10px 10px 10px !important}.hexagon-inner .hex-middle{font-size:.8rem !important}}@media (max-width: 520px){.section-1 .roblox-btn{margin-top:0}}@media (max-width: 440px){.section-1 .roblox-btn{padding:3px 10px;font-size:.8rem}.section-2 .section-title-background{border-radius:25% 25% 0 0 !important}}@media (max-width: 375px){.section-1 .roblox-btn{padding:3px 10px;font-size:.8rem}}@media (max-width: 1200px){.section-1{margin-top:2rem}}.section-2{background:#e2ebcf}.section-2 .section-title-background{border-radius:100% 100% 0 0;background:#e2ebcf}.section-3,.section-5,.section-7{background:#568e43}.section-4{background:#2f7fb1}.section-6{background:#000}.section-8{background:#e4f2cf}.section-9{background:#fff}.section-5-content h3,.section-5-1 h3,.section-5-2 h3,.section-5-3 h3{background:#ffb531;color:#fff;padding:10px 10px;margin-bottom:10px}.hexagon-outer{width:192px;height:218px;background:#fff;clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);display:flex;align-items:center;justify-content:center}.hexagon-inner{width:182px;height:208px;background:#2f7fb1;clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);display:flex;flex-direction:column;justify-content:space-between;align-items:center;color:#fff;text-align:center;padding:32px 16px;box-sizing:border-box}.hexagon-inner .hex-middle{flex:1;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:bold}.table-area{background:#e4f2cf}.banner-tag{display:inline-block;background:#ffa800;color:#fff;font-weight:bold;font-size:1.2rem;padding:4px 16px 4px 4px;position:relative;clip-path:polygon(0 0, 85% 0, 100% 100%, 0 100%);box-shadow:0 2px 8px #0005;letter-spacing:2px}.qa-bubble-left{background:#fcfcf5;border-radius:32px;position:relative;padding:32px 40px 24px 56px;margin:32px 0;box-shadow:0 2px 12px #0001;font-size:1.25rem}.qa-bubble-left::before{content:"";position:absolute;left:-32px;top:48px;width:40px;height:32px;background:#fcfcf5;clip-path:polygon(0 50%, 100% 0, 100% 100%)}.qa-bubble-right{background:#fcfcf5;border-radius:32px;position:relative;padding:32px 56px 24px 40px;margin:32px 0;box-shadow:0 2px 12px #0001;font-size:1.25rem}.qa-bubble-right::after{content:"";position:absolute;right:-32px;top:50%;transform:translateY(-50%);width:40px;height:32px;background:#fcfcf5;clip-path:polygon(100% 50%, 0 0, 0 100%)}.qa-title{color:#c6920a;font-size:2.2rem;font-weight:bold;display:inline-block;vertical-align:middle;margin-right:12px}.qa-question{font-size:1.4rem;font-weight:bold;display:inline-block;vertical-align:middle}.qa-divider{border:none;border-top:2px dashed #333;margin:18px 0 18px 0}.qa-answer{font-size:1rem;color:#222;line-height:1.8}.camp-title{background:#4b813b;color:#fff;font-weight:bold;text-align:center;padding:5px 0;margin:0 auto;width:50%;box-shadow:0 4px 16px #0002;border-radius:8px 8px 12px 12px;clip-path:polygon(0 0, 100% 0, 92% 100%, 8% 100%);letter-spacing:6px}.land{background:#76b861;border-radius:12px;padding:12px;margin-right:12px;margin-left:12px}.land table{background:#e4f2cf}

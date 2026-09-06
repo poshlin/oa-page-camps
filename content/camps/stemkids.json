@@ -1,0 +1,23 @@
+{
+  "slug": "stemkids",
+  "name": "STEAM 小小創客營",
+  "body": "stemkids.html",
+  "meta": {
+    "title": "{{SEASON}} 小小創客營｜橘子蘋果｜國小低年級的數理與程式{{SEASON_TYPE}}",
+    "description": "為國小 1-2 年級孩子規劃的{{SEASON}}營隊。橘子蘋果 STEAM 小小創客營透過互動積木與動手實驗，培養數理與程式邏輯，做出會動的機器人。"
+  },
+  "courses_for_schema": [
+    {
+      "name": "STEAM 小小創客營",
+      "grade": "國小一年級至二年級",
+      "description": "以互動積木與動手實驗培養數理與程式邏輯，完成會動的機器人作品。"
+    }
+  ],
+  "expect": {
+    "must_not_contain": [],
+    "must_contain": [
+      "小小創客營",
+      "STEAM"
+    ]
+  }
+}

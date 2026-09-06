@@ -1,11 +1,29 @@
 # oa-page-camps — 橘子蘋果寒暑假營隊頁
 
 從官網 `/camps/{slug}` 搬過來的營隊頁，改成「JSON 內容 ＋ 模板 ＋ build」的自主管理模式，
-行銷部自己就能改內容與版型，不必每季找工程師。目前只有麥塊營（`minecraft`），驗證成功後再搬其餘 8 頁。
+行銷部自己就能改內容與版型，不必每季找工程師。**9 支子頁全部搬完**（總覽頁 `/camps` 還在官網，未搬）。
+
+| slug | 頁面 | 本季狀態 |
+|---|---|---|
+| `minecraft` | 麥塊營隊 | 初階＋影片創作營有開；進階與材質營已移除 |
+| `roblox` | Roblox 營隊 | 兩個都有開 |
+| `financial_quotient` | 財商數學創客營 | 有開 |
+| `stemkids` | STEAM 小小創客營 | 有開 |
+| `python` | Python 遊戲體驗營 | 有開 |
+| `ainteraction` | AI 互動藝術營 | 有開 |
+| `online` | 線上 APCS 檢定培訓營 | 有開 |
+| `apcs` | APCS 檢定培訓營 | 🔴 實體不開、只開線上，頁面改為導向 `/camps/online` |
+| `gai` | AI 創意實戰營 | 🔴 本季完全不開，頁面改為導向 AI 互動藝術營 |
+
+未開課的兩頁**保留頁面、不 noindex 也不 301**——`/camps/gai` 在「ai夏令營」排 1.8 名，
+排名是多年資產，砍掉明年要重來。正解是換掉承諾、導流到有開的營隊。
 
 ```bash
 npm run build   # 產生 dist/
-npm test        # 67 項驗收斷言，全過才准 push
+npm test        # 351 項驗收斷言，全過才准 push
+
+python3 tools/import-camp.py <slug>          # 從官網再搬一頁進來
+python3 tools/compare-with-live.py <slug>    # 跟官網現行頁對照，看掉了什麼
 ```
 
 ---
@@ -56,7 +74,10 @@ OA_BASE=/oa-page-camps npm run build   # BASE = /oa-page-camps（GitHub Action �
 | 「營隊比一比」要拿掉／加回一個營隊 | `content/camps/{slug}.json` 的 `comparison.columns` 刪一項或補一項。桌機與手機兩張表會同時變、不會留空白欄 |
 | title / description | `content/camps/{slug}.json` 的 `meta` |
 | 版面、區塊 | `templates/bodies/{slug}.html` |
-| 樣式 | `templates/css/page-inline.css`（`oa-site.css` 是官網全站樣式的快照，不要手改） |
+| 樣式 | `templates/css/<slug>-inline.css`（`oa-site.css` 是官網全站樣式的快照，不要手改） |
+
+> **「營隊比一比」只有麥塊頁抽成 JSON**。其餘頁的比較表還是 body 裡的原始 HTML——
+> 那一頁是因為要拿掉一個營隊、原本的圖又畫死 3 欄才改的。哪一頁需要增減營隊，再照麥塊的做法抽。
 
 ---
 
@@ -74,6 +95,16 @@ OA_BASE=/oa-page-camps npm run build   # BASE = /oa-page-camps（GitHub Action �
 要改「圖裡面的內容」只能改圖。原始素材封存在 `assets-archive/`。
 
 ---
+
+## 🔴 交接時要請數位長處理的三件事
+
+1. **CSRF token**：官網原頁的 `authenticity_token` 是 Rails 當下產生的，搬成靜態頁會凍結成一組
+   過期字串、表單一送就失敗。所以已經清空並標記 `data-oa-csrf="1"`，**shell 注入時要填入當下的 token**。
+   共 6 頁有留單表單：minecraft、gai、apcs、online、python、stemkids。
+2. **梯次區塊**：minecraft 與 roblox 保留了 `<turbo-frame id="get_stages">` 錨點，靜態站產不出來，
+   要接回官網的 `/camps/get_stages`。其餘頁官網本來就沒有這個 frame。
+3. **總覽頁 `/camps` 還在官網**：卡片清單、header 導覽的「材質營（3-7年級）」字樣，
+   都還要請工程師改（見行銷部另發的工單 D 區）。
 
 ## 不要動的地方
 

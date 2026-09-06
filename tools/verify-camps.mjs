@@ -19,8 +19,6 @@ check("至少有一份營隊 JSON", camps.length > 0);
 const built = buildAll({ quiet: true });
 check("每份 JSON 都產生一頁", built.length === camps.length);
 
-// 🔴 2027 寒假未開課清單（保旭 2026-09-04 確認）——這些字樣不得在頁面上復活
-const NOT_RUNNING = ["材質模組設計營", "進階程式創客營", "進階班", "進階須上過", "全台唯一麥塊教育版", "參加過初階班", "4~7 年級", "小三到國一"];
 
 for (const camp of camps) {
   const tag = `[${camp.slug}]`;
@@ -36,15 +34,17 @@ for (const camp of camps) {
   // 🔴 製作期（origin＝poshlin、開著公開的 GitHub Pages 預覽）必須 noindex，
   // 否則 Google 會收錄一份未發布的副本跟官網現行頁打架。上線當天改成 index。
   check(`${tag} 預覽期為 noindex`, /content="noindex, follow"/.test(html));
-  check(`${tag} title 帶入當季年份`, html.includes(common.season));
+  // 有些頁（本季不開的 gai、只開線上的 apcs）title 刻意不寫季節，避免對外承諾錯誤
+  if (/\{\{SEASON/.test(camp.meta.title)) check(`${tag} title 帶入當季年份`, html.includes(common.season_short));
 
-  // 未開課內容不得復活
+  // 每頁自己的驗收條件（content/camps/<slug>.json 的 expect）
+  const expect = camp.expect || {};
+  const NOT_RUNNING = expect.must_not_contain || [];
+  check(`${tag} 有列未開課字樣清單`, Array.isArray(expect.must_not_contain));
   for (const w of NOT_RUNNING) check(`${tag} 未開課內容「${w}」＝0`, !text.includes(w), w);
-
-  // 保留內容
-  for (const w of ["麥塊程式創客營", "影片創作營", "初階班課表", "麥塊影片營課表", "小三到小六"]) {
-    check(`${tag} 保留內容「${w}」仍在`, text.includes(w), w);
-  }
+  for (const w of expect.must_contain || []) check(`${tag} 保留內容「${w}」仍在`, text.includes(w), w);
+  // 本季不開的營隊不能再有任何「去報名」的出口
+  for (const h of expect.must_not_link || []) check(`${tag} 無連往「${h}」`, !html.includes(`href="${h}"`), h);
 
   // 圖片：不得殘留 data-src（靜態站沒有 lazy JS，會變成看不見的圖）
   const imgs = html.match(/<img[^>]*>/g) || [];
@@ -54,7 +54,8 @@ for (const camp of camps) {
   // 自家資產一律「BASE + 根絕對路徑」：正式站 /camps、預覽站 /oa-page-camps。
   // 不能用 ../assets（會被尾斜線綁死），也不能裸寫 /assets（預覽站會 404）。
   check(`${tag} 資產前綴正確`, !html.includes('"../assets/') && !/(?:src|href)="\/(assets|css)\//.test(html) || BASE === "");
-  check(`${tag} 資產都帶 BASE 前綴`, (html.match(new RegExp(`"${BASE}/(assets|css)/`, "g")) || []).length > 30);
+  const basedRefs = (html.match(new RegExp(`"${BASE}/(assets|css)/`, "g")) || []).length;
+  check(`${tag} 資產都帶 BASE 前綴`, basedRefs >= 2, `僅 ${basedRefs} 處`);
   check(`${tag} 未殘留 BASE placeholder`, !html.includes("{{BASE}}"));
   // canonical／og:url 本來就是官網絕對網址，這裡只擋「外部載入的資源」（追蹤碼與字型圖示由 shell 管）
   const extLinks = (html.match(/<link[^>]*>/g) || []).filter((t) => t.includes("stylesheet") && /href="https?:/.test(t));
@@ -68,10 +69,19 @@ for (const camp of camps) {
   check(`${tag} 圖片檔案都存在`, missing.length === 0, missing.slice(0, 3).join(","));
 
   // 背景圖（style="background-image"）也要存在——只檢查 <img> 會漏掉整頁配色
-  const bgUrls = [...html.matchAll(/url\((?:&#39;|['"])?[^)'"]*?(assets\/[^)'"]+?)(?:&#39;|['"])?\)/g)].map((m) => m[1]);
+  // 背景圖可能寫在 HTML 的 style 屬性，也可能寫在該頁的 CSS（url(../assets/…)）——兩邊都要看，
+  // 只檢查 <img> 或只檢查 HTML 會漏掉整頁配色。
+  const cssFile = join(OUTPUT_DIR, "css", `${camp.slug}-inline.css`);
+  check(`${tag} 有專屬 CSS`, existsSync(cssFile));
+  const css = existsSync(cssFile) ? readFileSync(cssFile, "utf8") : "";
+  const bgUrls = [
+    ...[...html.matchAll(/url\((?:&#39;|['"])?[^)'"]*?(assets\/[^)'"]+?)(?:&#39;|['"])?\)/g)].map((m) => m[1]),
+    ...[...css.matchAll(/url\((?:['"])?\.\.\/(assets\/[^)'"]+?)(?:['"])?\)/g)].map((m) => m[1]),
+  ];
   const bgMissing = [...new Set(bgUrls)].filter((u) => !existsSync(join(OUTPUT_DIR, u)));
   check(`${tag} 背景圖檔案都存在`, bgMissing.length === 0, bgMissing.slice(0, 3).join(","));
-  check(`${tag} 有背景圖（頁面配色沒掉）`, bgUrls.length >= 5, `僅 ${bgUrls.length} 張`);
+  // 每頁背景圖數量差很多（有的頁靠色塊、有的頁整頁是圖），只擋「一張都沒有」這種明顯搬壞
+  check(`${tag} 有背景圖或圖片（頁面沒被搬空）`, bgUrls.length + imgs.length >= 3, `背景 ${bgUrls.length}／圖 ${imgs.length}`);
 
   // 刪內容留下的「空殼」：容器還在、裡面的字被拿掉了，畫面會出現一顆沒有文字的按鈕
   // （2026-09-06 實際發生：移除「進階班課表」時只刪了 <a>，留下帶背景圖的空 div）
@@ -103,40 +113,56 @@ for (const camp of camps) {
   // 🔴 桌機（≥992px）的比較表不是 <table>，是「一張圖 ＋ 絕對定位疊字」：
   // .first-N 是欄標題、.row-word ... .row-N 是每一格。刪營隊時三種版型都要同步刪，
   // 2026-09-06 就漏了 .row-word.fifth.row-4（材質營的成果收穫）還留在圖上的空白欄裡。
-  // 比較表已改成由 comparison.columns 產生，桌機不再用「畫死欄數的圖 ＋ 絕對定位疊字」
-  const nCols = camp.comparison.columns.length;
-  check(`${tag} 已無圖片版比較表（會留空白欄）`, !html.includes("b_6_icon-2") && !/class="first first-\d"/.test(html));
-  check(`${tag} 比較表由 JSON 產生`, camp.comparison && nCols > 0);
-  const tables = html.match(/<table[\s\S]*?<\/table>/g) || [];
-  check(`${tag} 桌機與手機各一張比較表`, tables.length === 2, `實際 ${tables.length} 張`);
-  check(`${tag} 兩張比較表內容一致`, tables.length === 2 && tables[0] === tables[1]);
-  for (const c of camp.comparison.columns) check(`${tag} 比較表含「${c.subtitle}」`, text.includes(c.subtitle));
+  // 比較表：有抽成 JSON 的頁才檢查欄數（沒抽的頁維持原始 HTML，見 README）
+  const nCols = camp.comparison ? camp.comparison.columns.length : null;
+  if (camp.comparison) {
+    check(`${tag} 已無圖片版比較表（會留空白欄）`, !html.includes("b_6_icon-2") && !/class="first first-\d"/.test(html));
+    const tables = html.match(/<table[\s\S]*?<\/table>/g) || [];
+    check(`${tag} 桌機與手機各一張比較表`, tables.length === 2, `實際 ${tables.length} 張`);
+    check(`${tag} 兩張比較表內容一致`, tables.length === 2 && tables[0] === tables[1]);
+    for (const c of camp.comparison.columns) check(`${tag} 比較表含「${c.subtitle}」`, text.includes(c.subtitle));
+  }
   check(`${tag} 無空的清單項目`, !/<li>\s*<\/li>/.test(html));
 
   const firstRow = html.match(/<table[\s\S]*?<tr[^>]*>([\s\S]*?)<\/tr>/);
-  if (firstRow) {
+  if (firstRow && nCols !== null) {
     const cells = (firstRow[1].match(/<(th|td)[\s>]/g) || []).length;
     check(`${tag} 比較表欄數 = 營隊數 + 標籤欄`, cells === nCols + 1, `實際 ${cells} 欄`);
   }
 
   // 價格組數
-  const priceGroups = (text.match(/【[^】]+】/g) || []).filter((x) => x.includes("營"));
-  check(`${tag} 價格組數 = 開課營隊數`, priceGroups.length === nCols, priceGroups.join(","));
+  if (expect.price_groups !== undefined) {
+    const priceGroups = (text.match(/【[^】]+】/g) || []).filter((x) => x.includes("營"));
+    check(`${tag} 價格組數 = 開課營隊數`, priceGroups.length === expect.price_groups, priceGroups.join(","));
+  }
 
-  // 梯次區塊：靜態站無法產生，必須保留錨點給官網接，且參數不含未開課代號
+  // 梯次區塊：只有麥塊與 Roblox 的官網頁用 turbo-frame 帶梯次，其餘頁本來就沒有。
+  // 有的話要原樣保留給官網接，而且參數不能還帶著未開課營隊的代號。
   const tf = html.match(/<turbo-frame[^>]*id="get_stages"[^>]*>/);
-  check(`${tag} 保留梯次待接錨點`, !!tf);
-  if (tf) check(`${tag} 梯次參數不含未開課代號`, !tf[0].includes("mctexture"));
+  for (const code of expect.stage_codes_removed || []) {
+    check(`${tag} 梯次參數不含「${code}」`, !!tf && !tf[0].includes(code));
+  }
 
   // 表單：留單流程要完整，且下拉不得出現未開課營隊
-  check(`${tag} 留單表單完整`, html.includes('action="/potential_students"'));
+  // 轉換路徑：有的頁把留單表單直接寫在頁上，有的頁是按鈕開共用 modal（modal 由 shell 提供）
+  // 🔴 官網原頁的 authenticity_token 是 Rails 當下產生的，搬成靜態頁後會凍結成一組過期字串，
+  // 表單一送就失敗。這裡清空並標記 data-oa-csrf，交接時請數位長的 shell 填入當下的 token。
+  const tokens = [...html.matchAll(/<input[^>]*name="authenticity_token"[^>]*>/g)].map((m) => m[0]);
+  check(`${tag} 無寫死的 CSRF token`, tokens.every((t) => /value=""/.test(t) && t.includes("data-oa-csrf")), `${tokens.length} 個`);
+
+  const hasForm = html.includes('action="/potential_students"');
+  const hasModalCta = /data-bs-target="#(potentialStudent|free-book)/.test(html);
+  const hasRegLink = html.includes('href="/camps/registration"');
+  check(`${tag} 有轉換路徑（留單表單／報名 modal／報名頁連結）`, hasForm || hasModalCta || hasRegLink);
   const opts = [...html.matchAll(/<option[^>]*value="([^"]*)"/g)].map((m) => m[1]);
-  check(`${tag} 表單下拉無未開課營隊`, !opts.some((o) => o.includes("材質模組")), opts.join(","));
+  check(`${tag} 表單下拉無未開課營隊`, !opts.some((o) => NOT_RUNNING.some((w) => o.includes(w))), opts.join(","));
 
   // 版型與紅線
   check(`${tag} 保留 header/footer 注入錨點`, html.includes("<oa-header></oa-header>") && html.includes("<oa-footer></oa-footer>"));
-  check(`${tag} 桌機與手機兩個版本都在`, html.includes("d-md-block") && html.includes("d-md-none"));
-  check(`${tag} 品牌名正確`, !text.includes("學院"));
+  // 只有做了「桌機一份 HTML、手機一份 HTML」的頁才檢查（多數頁是純 CSS 響應式）
+  if (expect.rwd_dual_html) check(`${tag} 桌機與手機兩個版本都在`, html.includes("d-md-block") && html.includes("d-md-none"));
+  // 只擋品牌名寫錯（正確是「學苑」）。「學院」本身是正常詞——apcs 頁的榜單就有「工程與電資學院」
+  check(`${tag} 品牌名正確`, !/橘子蘋果(程式)?學院/.test(text));
   check(`${tag} 無「免費再上一次」`, !text.includes("免費再上一次"));
 
   // schema
@@ -154,9 +180,16 @@ for (const camp of camps) {
 
 // assets 不得有孤兒檔：刪內容卻沒刪圖，通常代表版面上還留著半截殘骸
 {
-  const assetDir = join(OUTPUT_DIR, "assets");
-  const allHtml = camps.map((c) => join(OUTPUT_DIR, c.slug, "index.html")).filter(existsSync).map((f) => readFileSync(f, "utf8")).join("\n");
-  const orphans = readdirSync(assetDir).filter((f) => !allHtml.includes(f));
+  // 頁面 HTML ＋ 各頁 CSS 都要算進去：背景圖多半只出現在 CSS 裡
+  const sources = [
+    ...camps.map((c) => join(OUTPUT_DIR, c.slug, "index.html")),
+    ...camps.map((c) => join(OUTPUT_DIR, "css", `${c.slug}-inline.css`)),
+  ];
+  const allHtml = sources.filter(existsSync).map((f) => readFileSync(f, "utf8")).join("\n");
+  const walk = (dir, prefix = "") =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+      e.isDirectory() ? walk(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`]);
+  const orphans = walk(join(OUTPUT_DIR, "assets")).filter((f) => !allHtml.includes(f));
   check("assets 無孤兒檔", orphans.length === 0, orphans.slice(0, 5).join(","));
 }
 

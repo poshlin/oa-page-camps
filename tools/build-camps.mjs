@@ -43,6 +43,8 @@ export function readSources() {
 // {{SEASON}} / {{SEASON_TYPE}} 由共用檔帶入，年份季節只改一處
 const applySeason = (text, common) =>
   String(text).replace(/\{\{SEASON\}\}/g, common.season).replace(/\{\{SEASON_TYPE\}\}/g, common.season_type)
+    .replace(/\{\{SEASON_SHORT\}\}/g, common.season_short)
+    .replace(/\{\{SEASON_WORD\}\}/g, common.season_word)
     .replace(/\{\{BASE\}\}/g, basePath(common));
 
 function graphJsonLd(camp, title, description, url) {
@@ -73,7 +75,8 @@ function graphJsonLd(camp, title, description, url) {
 // 桌機與手機兩張表同時少一欄，不會留下空白欄（2026-09-06 之前是畫死的圖，所以做不到）。
 export function comparisonTable(camp) {
   const cmp = camp.comparison;
-  if (!cmp || !Array.isArray(cmp.columns) || cmp.columns.length === 0) {
+  if (!cmp) return null;   // 沒抽成 JSON 的頁，比較表就留在 body 裡的原始 HTML
+  if (!Array.isArray(cmp.columns) || cmp.columns.length === 0) {
     throw new Error(`${camp.slug}: comparison.columns 至少要有一個營隊`);
   }
   const li = (item) =>
@@ -115,13 +118,13 @@ export function buildAll({ quiet = false } = {}) {
     const bodyPath = join(ROOT, "templates", "bodies", camp.body);
     if (!existsSync(bodyPath)) throw new Error(`${file}: 找不到 body 檔 ${camp.body}`);
     const table = comparisonTable(camp);
-    const body = applySeason(readFileSync(bodyPath, "utf8"), common)
-      .replace(/\{\{COMPARISON_DESKTOP\}\}/g, table)
-      .replace(/\{\{COMPARISON_MOBILE\}\}/g, table);
+    let body = applySeason(readFileSync(bodyPath, "utf8"), common);
+    if (table) body = body.replace(/\{\{COMPARISON_DESKTOP\}\}/g, table).replace(/\{\{COMPARISON_MOBILE\}\}/g, table);
     const title = applySeason(camp.meta.title, common) + " — 橘子蘋果程式學苑";
     const description = applySeason(camp.meta.description, common);
     const url = pageUrl(camp.slug);
     const html = applySeason(template, common)
+      .replace(/\{\{SLUG\}\}/g, camp.slug)
       .replace(/\{\{TITLE\}\}/g, esc(title))
       .replace(/\{\{DESCRIPTION\}\}/g, esc(description))
       .replace(/\{\{PAGE_URL\}\}/g, url)
