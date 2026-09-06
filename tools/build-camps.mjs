@@ -50,6 +50,7 @@ const applySeason = (text, common) =>
   String(text).replace(/\{\{SEASON\}\}/g, common.season).replace(/\{\{SEASON_TYPE\}\}/g, common.season_type)
     .replace(/\{\{SEASON_SHORT\}\}/g, common.season_short)
     .replace(/\{\{SEASON_WORD\}\}/g, common.season_word)
+    .replace(/\{\{DURATION\}\}/g, common.duration)
     .replace(/\{\{BASE\}\}/g, basePath(common));
 
 // FAQPage schema 直接從 body 的 .qa-question / .qa-answer 抽出來產生。

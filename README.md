@@ -71,6 +71,7 @@ OA_BASE=/oa-page-camps npm run build   # BASE = /oa-page-camps（GitHub Action �
 | 想改什麼 | 改哪裡 |
 |---|---|
 | 年份、季節（冬令營／夏令營） | `content/shared/camps_common.json` 的 `season` / `season_type` — **改一處，所有營隊頁一起變** |
+| 營隊天數（四天／三天） | 同一份檔的 `duration`。原本 8 頁共 25 處寫死「四天」，已全部參數化 |
 | 「營隊比一比」要拿掉／加回一個營隊 | `content/camps/{slug}.json` 的 `comparison.columns` 刪一項或補一項。桌機與手機兩張表會同時變、不會留空白欄 |
 | title / description | `content/camps/{slug}.json` 的 `meta` |
 | 版面、區塊 | `templates/bodies/{slug}.html` |
