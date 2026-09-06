@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESCRIPTION}}">
+  <!-- 🔴 上線當天必改：改成 index, follow, max-image-preview:large, max-snippet:-1
+       現在是 noindex 是因為 poshlin.github.io 預覽是公開的，不擋會讓 Google
+       收錄一份未發布的副本，跟官網現行的 /camps/minecraft 打架。
+       完整切換清單見本 repo 的 README.md -->
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="{{PAGE_URL}}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="橘子蘋果程式學苑">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESCRIPTION}}">
+  <meta property="og:url" content="{{PAGE_URL}}">
+  <meta property="og:locale" content="zh_TW">
+
+  <!-- 官網原生樣式（快照，不引用官網路徑以免其改版時 digest 變動導致 404） -->
+  <link rel="stylesheet" href="{{BASE}}/css/oa-site.css">
+  <link rel="stylesheet" href="{{BASE}}/css/page-inline.css">
+
+  <!-- 結構化資料 -->
+{{GRAPH_JSON_LD}}
+</head>
+<body>
+  <oa-header></oa-header>
+
+{{BODY}}
+
+  <oa-footer></oa-footer>
+</body>
+</html>

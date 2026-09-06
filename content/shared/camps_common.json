@@ -1,0 +1,21 @@
+{
+  "_note": "全部營隊頁共用的設定。季節與年份每年更新兩次（9 月改下個寒假、3 月改當年暑假），改這一檔全部營隊頁一起生效。",
+  "season": "2027 寒假",
+  "season_short": "2027",
+  "season_type": "冬令營",
+  "duration": "四天",
+  "booking": {
+    "heading": "{{SEASON}}{{SEASON_TYPE}}，開放晚鳥預約！",
+    "lead": "留下晚鳥預約資料，即可領取價值 $2,500 元的限量營隊報名折扣！"
+  },
+  "stages": {
+    "_note": "梯次與教室清單由官網 Corp 動態提供，靜態站無法自行產生。部署時請數位長把這個區塊接回官網的 /camps/get_stages。在接上之前，模板會顯示 fallback 連結導向報名頁。",
+    "heading": "地點與梯次",
+    "remote_src": "/camps/get_stages",
+    "fallback_text": "查看開課教室與梯次並報名",
+    "fallback_url": "/camps/registration"
+  },
+  "registration_url": "/camps/registration",
+  "base_path": "/camps",
+  "_base_path_why": "正式站把這個 repo 掛在 /camps 底下，所以資產是 /camps/assets/…。預覽站在 GitHub Pages 的 /oa-page-camps/ 底下，用 OA_BASE=/oa-page-camps 覆蓋。兩邊都是根絕對路徑，不受尾斜線影響（用 ../assets 就會被尾斜線綁死）。"
+}

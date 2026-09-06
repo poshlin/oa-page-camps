@@ -1,0 +1,11 @@
+{
+  "name": "oa-page-camps",
+  "private": true,
+  "type": "module",
+  "description": "橘子蘋果寒暑假營隊頁：由 content/camps 的 JSON 自動產生",
+  "scripts": {
+    "build": "node tools/build-camps.mjs",
+    "test": "node tools/verify-camps.mjs",
+    "dev": "node tools/build-camps.mjs && python3 -m http.server 8778 --directory dist"
+  }
+}

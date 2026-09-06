@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "oa-page-camps",
+  "compatibility_date": "2026-09-06",
+  "build": {
+    // 正式站的資產前綴吃 content/shared/camps_common.json 的 base_path（/camps）
+    "command": "npm run build"
+  },
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

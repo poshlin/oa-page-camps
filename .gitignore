@@ -1,0 +1,5 @@
+.venv/
+dist/
+_preview/
+.claude/
+.DS_Store
