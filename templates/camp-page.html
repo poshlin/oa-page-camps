@@ -18,6 +18,11 @@
   <meta property="og:description" content="{{DESCRIPTION}}">
   <meta property="og:url" content="{{PAGE_URL}}">
   <meta property="og:locale" content="zh_TW">
+  <!-- 🔴 og:image 必須是絕對網址。製作期指預覽站（GitHub Action 設 OA_ORIGIN），
+       正式建置自動指 orangeapple.co——不必手動切換，但上線後記得確認一次 -->
+  <meta property="og:image" content="{{OG_IMAGE}}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{OG_IMAGE}}">
 
   <!-- 官網原生樣式（快照，不引用官網路徑以免其改版時 digest 變動導致 404） -->
   <link rel="stylesheet" href="{{BASE}}/css/oa-site.css">

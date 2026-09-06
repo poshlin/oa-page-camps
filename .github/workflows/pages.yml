@@ -22,9 +22,9 @@ jobs:
         with:
           node-version: 20
       - name: 建置（預覽前綴）
-        run: OA_BASE=/oa-page-camps npm run build
+        run: OA_BASE=/oa-page-camps OA_ORIGIN=https://poshlin.github.io npm run build
       - name: 驗收
-        run: OA_BASE=/oa-page-camps npm test
+        run: OA_BASE=/oa-page-camps OA_ORIGIN=https://poshlin.github.io npm test
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

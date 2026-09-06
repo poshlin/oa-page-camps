@@ -29,5 +29,6 @@
       "/camps/registration"
     ],
     "_why": "本季不開（gai 完全不開、apcs 只開線上），頁面不得再出現任何優惠、價格或報名承諾——但頁面要保留、不 noindex 也不 301，排名是多年資產。"
-  }
+  },
+  "og_image": "_site/camps/index/thumb_camp-05@2x.png"
 }

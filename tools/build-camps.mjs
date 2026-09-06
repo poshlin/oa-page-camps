@@ -26,6 +26,11 @@ export function readCamp(file) {
 
 // 資產前綴：正式站掛在 /camps、GitHub Pages 預覽掛在 /oa-page-camps。
 // 兩者都是根絕對路徑，才不會被「網址有沒有尾斜線」影響（相對路徑 ../assets 會）。
+// og:image 這類必須是絕對網址的欄位用得到：預覽站要指 poshlin.github.io，正式站指官網
+export function assetOrigin() {
+  return (process.env.OA_ORIGIN ?? SITE).replace(/\/$/, "");
+}
+
 export function basePath(common) {
   const b = process.env.OA_BASE ?? common.base_path ?? "";
   if (b && !b.startsWith("/")) throw new Error(`OA_BASE 必須以 / 開頭，收到「${b}」`);
@@ -47,7 +52,24 @@ const applySeason = (text, common) =>
     .replace(/\{\{SEASON_WORD\}\}/g, common.season_word)
     .replace(/\{\{BASE\}\}/g, basePath(common));
 
-function graphJsonLd(camp, title, description, url) {
+// FAQPage schema 直接從 body 的 .qa-question / .qa-answer 抽出來產生。
+// 🔴 一定要「從畫面上的文字產生」，不能另外手寫一份——schema 跟畫面對不上就是 cloaking。
+export function faqFromBody(body) {
+  const qs = [...body.matchAll(/<span class="qa-question">([\s\S]*?)<\/span>/g)].map((m) => m[1]);
+  const as = [...body.matchAll(/<div class="qa-answer">([\s\S]*?)<\/div>/g)].map((m) => m[1]);
+  if (qs.length === 0 || qs.length !== as.length) return null;
+  const plain = (h) => h.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  return {
+    "@type": "FAQPage",
+    mainEntity: qs.map((q, i) => ({
+      "@type": "Question",
+      name: plain(q),
+      acceptedAnswer: { "@type": "Answer", text: plain(as[i]) },
+    })),
+  };
+}
+
+function graphJsonLd(camp, title, description, url, body) {
   const org = {
     "@type": ["EducationalOrganization", "Organization"],
     "@id": `${SITE}/#organization`,
@@ -68,7 +90,10 @@ function graphJsonLd(camp, title, description, url) {
     "@type": "Course", name: c.name, description: c.description,
     provider: { "@id": `${SITE}/#organization` }, educationalLevel: c.grade, courseMode: "onsite",
   }));
-  return '  <script type="application/ld+json">' + JSON.stringify({ "@context": "https://schema.org", "@graph": [org, breadcrumb, webpage, ...courses] }) + "</script>";
+  const faq = body ? faqFromBody(body) : null;
+  if (faq) faq["@id"] = `${url}#faq`;
+  const graph = [org, breadcrumb, webpage, ...courses, ...(faq ? [faq] : [])];
+  return '  <script type="application/ld+json">' + JSON.stringify({ "@context": "https://schema.org", "@graph": graph }) + "</script>";
 }
 
 // 「營隊比一比」由 camp.comparison.columns 產生：拿掉一個營隊＝刪掉一項，
@@ -128,13 +153,31 @@ export function buildAll({ quiet = false } = {}) {
       .replace(/\{\{TITLE\}\}/g, esc(title))
       .replace(/\{\{DESCRIPTION\}\}/g, esc(description))
       .replace(/\{\{PAGE_URL\}\}/g, url)
-      .replace("{{GRAPH_JSON_LD}}", graphJsonLd(camp, title, description, url))
+      .replace(/\{\{OG_IMAGE\}\}/g, `${assetOrigin()}${basePath(common)}/assets/${camp.og_image}`)
+      .replace("{{GRAPH_JSON_LD}}", graphJsonLd(camp, title, description, url, body))
       .replace("{{BODY}}", body);
     mkdirSync(join(OUTPUT_DIR, camp.slug), { recursive: true });
     writeFileSync(join(OUTPUT_DIR, camp.slug, "index.html"), html, "utf8");
     results.push({ slug: camp.slug, name: camp.name, bytes: html.length });
     if (!quiet) console.log(`  ${camp.slug.padEnd(12)} ${camp.name.padEnd(10)} ${String(Math.round(html.length / 1024)).padStart(3)} KB  → dist/${camp.slug}/index.html`);
   }
+  // 預覽站的索引頁：只在 OA_BASE 有設定時產生（＝GitHub Pages 預覽）。
+  // 🔴 正式站不能有這一頁——那邊的 /camps 是官網自己的營隊總覽頁，蓋掉就出事。
+  if (process.env.OA_BASE) {
+    const rows = results.map((r) => `<li><a href="${basePath(common)}/${r.slug}/">${r.name}</a> <code>/camps/${r.slug}</code></li>`).join("\n");
+    writeFileSync(join(OUTPUT_DIR, "index.html"),
+      `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>營隊頁預覽索引</title>
+<style>body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:640px;margin:3rem auto;padding:0 1.2rem;line-height:1.8;color:#2D2E32}
+h1{font-size:1.4rem}li{margin:.4rem 0}code{color:#777;font-size:.85em}a{color:#0a58ca}</style></head>
+<body><h1>營隊頁預覽（${results.length} 頁）</h1>
+<p>這是給行銷部看稿用的預覽，不是正式站。正式網址是 <code>orangeapple.co/camps/…</code>。</p>
+<ul>\n${rows}\n</ul></body></html>\n`, "utf8");
+    if (!quiet) console.log("  預覽索引頁                            → dist/index.html");
+  }
+
   const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     results.map((r) => `  <url><loc>${pageUrl(r.slug)}</loc></url>`).join("\n") + "\n</urlset>\n";
   writeFileSync(join(OUTPUT_DIR, "sitemap.xml"), sitemap, "utf8");

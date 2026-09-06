@@ -31,6 +31,14 @@ for (const camp of camps) {
   check(`${tag} 無未填 placeholder`, !/\{\{[A-Z0-9_]+\}\}/.test(html));
   check(`${tag} canonical 指向自己`, html.includes(`<link rel="canonical" href="${url}">`));
   check(`${tag} og:url 指向自己`, html.includes(`<meta property="og:url" content="${url}">`));
+  // og:image 必須是絕對網址且檔案真的在（貼 LINE／FB 抓不到縮圖是常見的上線漏網）
+  const og = html.match(/<meta property="og:image" content="([^"]+)">/);
+  check(`${tag} 有 og:image`, !!og);
+  if (og) {
+    check(`${tag} og:image 是絕對網址`, /^https?:\/\//.test(og[1]));
+    check(`${tag} og:image 檔案存在`, existsSync(join(ROOT, "assets", camp.og_image)));
+    check(`${tag} twitter:image 與 og:image 一致`, html.includes(`<meta name="twitter:image" content="${og[1]}">`));
+  }
   // 🔴 製作期（origin＝poshlin、開著公開的 GitHub Pages 預覽）必須 noindex，
   // 否則 Google 會收錄一份未發布的副本跟官網現行頁打架。上線當天改成 index。
   check(`${tag} 預覽期為 noindex`, /content="noindex, follow"/.test(html));
@@ -174,6 +182,15 @@ for (const camp of camps) {
   if (graph) {
     const org = graph["@graph"].find((n) => String(n["@id"]).endsWith("#organization"));
     check(`${tag} sameAs 唯三`, org && org.sameAs.length === 3);
+    // FAQPage：有 FAQ 區塊的頁必須有，而且每一題的文字要跟畫面上逐字相同（不同＝cloaking）
+    const qCount = (html.match(/class="qa-question"/g) || []).length;
+    const faqNode = graph["@graph"].find((n) => n["@type"] === "FAQPage");
+    check(`${tag} 有 FAQ 區塊就有 FAQPage schema`, qCount === 0 || !!faqNode, `畫面 ${qCount} 題`);
+    if (faqNode) {
+      check(`${tag} FAQPage 題數與畫面一致`, faqNode.mainEntity.length === qCount);
+      const bad = faqNode.mainEntity.filter((q) => !text.replace(/\s+/g, " ").includes(q.name));
+      check(`${tag} FAQ 問題文字與畫面逐字相同`, bad.length === 0, bad.map((b) => b.name.slice(0, 20)).join("｜"));
+    }
     check(`${tag} schema 不含未開課營隊`, !NOT_RUNNING.some((w) => JSON.stringify(graph).includes(w)));
   }
 }
