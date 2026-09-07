@@ -70,7 +70,7 @@ export function faqFromBody(body) {
   };
 }
 
-function graphJsonLd(camp, title, description, url, body) {
+function graphJsonLd(camp, title, description, url, body, common) {
   const org = {
     "@type": ["EducationalOrganization", "Organization"],
     "@id": `${SITE}/#organization`,
@@ -91,7 +91,13 @@ function graphJsonLd(camp, title, description, url, body) {
     "@type": "Course", name: c.name, description: c.description,
     provider: { "@id": `${SITE}/#organization` }, educationalLevel: c.grade, courseMode: "onsite",
   }));
-  const faq = body ? faqFromBody(body) : null;
+  // 🔴 schema 的文字也要跑季節代換，否則會把 {{SEASON_TYPE}} 直接送給 Google
+  const fromJson = Array.isArray(camp.faq) && camp.faq.length
+    ? { "@type": "FAQPage", mainEntity: camp.faq.map((x) => ({
+        "@type": "Question", name: applySeason(x.q, common),
+        acceptedAnswer: { "@type": "Answer", text: applySeason(x.a, common).replace(/\n/g, " ") } })) }
+    : null;
+  const faq = fromJson || (body ? faqFromBody(body) : null);
   if (faq) faq["@id"] = `${url}#faq`;
   const graph = [org, breadcrumb, webpage, ...courses, ...(faq ? [faq] : [])];
   return '  <script type="application/ld+json">' + JSON.stringify({ "@context": "https://schema.org", "@graph": graph }) + "</script>";
@@ -131,6 +137,22 @@ export function comparisonTable(camp) {
   return `<table>${head}${fit}${row("營隊<br/>特色", "features")}${row("學習<br/>技能", "skills")}${row("成果<br/>收穫", "outcome")}</table>`;
 }
 
+// FAQ：單一資料源。畫面上的問答與 FAQPage schema 都從 content/camps/<slug>.json 的 faq 產生，
+// 兩邊不可能對不上（對不上就是 cloaking）。
+// roblox 頁的 FAQ 是官網原本就做好的獨立設計，保留原樣，schema 改用 body 掃描（見 faqFromBody）。
+export function faqSection(camp, common) {
+  const faq = camp.faq;
+  if (!Array.isArray(faq) || faq.length === 0) return "";
+  const items = faq.map((x) =>
+    `<details class="oa-faq-item"><summary>${esc(applySeasonText(x.q, common))}</summary>` +
+    `<div class="oa-faq-a">${applySeasonText(x.a, common).split("\n").map((p) => `<p>${esc(p)}</p>`).join("")}</div></details>`
+  ).join("");
+  return '<section class="oa-faq"><div class="oa-faq-inner">' +
+    `<h2>${esc(camp.name)}常見問題</h2>${items}</div></section>`;
+}
+
+const applySeasonText = (t, common) => applySeason(t, common);
+
 // 「其他營隊」內鏈區塊：每頁列出其他營隊，依年級由小到大排，方便家長找到對的年齡。
 // 目的有兩個：①家長進錯頁時有地方去（營隊頁每月 6,700 次點擊，這些人已經有意願）
 //             ②讓 Google 知道這 9 頁是同一群，權重才流得動。
@@ -169,6 +191,7 @@ export function buildAll({ quiet = false } = {}) {
     const table = comparisonTable(camp);
     let body = applySeason(readFileSync(bodyPath, "utf8"), common);
     if (table) body = body.replace(/\{\{COMPARISON_DESKTOP\}\}/g, table).replace(/\{\{COMPARISON_MOBILE\}\}/g, table);
+    body = body.replace(/\{\{FAQ\}\}/g, faqSection(camp, common));
     body = body.replace(/\{\{OTHER_CAMPS\}\}/g, otherCampsBlock(camp, allCamps));
     const title = applySeason(camp.meta.title, common) + " — 橘子蘋果程式學苑";
     const description = applySeason(camp.meta.description, common);
@@ -179,7 +202,7 @@ export function buildAll({ quiet = false } = {}) {
       .replace(/\{\{DESCRIPTION\}\}/g, esc(description))
       .replace(/\{\{PAGE_URL\}\}/g, url)
       .replace(/\{\{OG_IMAGE\}\}/g, `${assetOrigin()}${basePath(common)}/assets/${camp.og_image}`)
-      .replace("{{GRAPH_JSON_LD}}", graphJsonLd(camp, title, description, url, body))
+      .replace("{{GRAPH_JSON_LD}}", graphJsonLd(camp, title, description, url, body, common))
       .replace("{{BODY}}", body);
     mkdirSync(join(OUTPUT_DIR, camp.slug), { recursive: true });
     writeFileSync(join(OUTPUT_DIR, camp.slug, "index.html"), html, "utf8");

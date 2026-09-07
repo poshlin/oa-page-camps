@@ -212,12 +212,14 @@ for (const camp of camps) {
     const org = graph["@graph"].find((n) => String(n["@id"]).endsWith("#organization"));
     check(`${tag} sameAs 唯三`, org && org.sameAs.length === 3);
     // FAQPage：有 FAQ 區塊的頁必須有，而且每一題的文字要跟畫面上逐字相同（不同＝cloaking）
-    const qCount = (html.match(/class="qa-question"/g) || []).length;
+    // 兩種 FAQ 版型：roblox 沿用官網原本的氣泡設計，其餘用 JSON 產生的 <details>
+    const qCount = (html.match(/class="qa-question"/g) || []).length + (html.match(/class="oa-faq-item"/g) || []).length;
     const faqNode = graph["@graph"].find((n) => n["@type"] === "FAQPage");
     check(`${tag} 有 FAQ 區塊就有 FAQPage schema`, qCount === 0 || !!faqNode, `畫面 ${qCount} 題`);
     if (faqNode) {
       check(`${tag} FAQPage 題數與畫面一致`, faqNode.mainEntity.length === qCount);
-      const bad = faqNode.mainEntity.filter((q) => !text.replace(/\s+/g, " ").includes(q.name));
+      const flat = text.replace(/\s+/g, " ");
+      const bad = faqNode.mainEntity.filter((q) => !flat.includes(q.name));
       check(`${tag} FAQ 問題文字與畫面逐字相同`, bad.length === 0, bad.map((b) => b.name.slice(0, 20)).join("｜"));
     }
     check(`${tag} schema 不含未開課營隊`, !NOT_RUNNING.some((w) => JSON.stringify(graph).includes(w)));
