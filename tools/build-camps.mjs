@@ -96,8 +96,8 @@ function graphJsonLd(camp, title, description, url, body, common) {
   // 🔴 schema 的文字也要跑季節代換，否則會把 {{SEASON_TYPE}} 直接送給 Google
   const fromJson = Array.isArray(camp.faq) && camp.faq.length
     ? { "@type": "FAQPage", mainEntity: camp.faq.map((x) => ({
-        "@type": "Question", name: applySeason(x.q, common),
-        acceptedAnswer: { "@type": "Answer", text: applySeason(x.a, common).replace(/\n/g, " ") } })) }
+        "@type": "Question", name: priceFill(applySeason(x.q, common), camp, common),
+        acceptedAnswer: { "@type": "Answer", text: priceFill(applySeason(x.a, common), camp, common).replace(/\n/g, " ") } })) }
     : null;
   const faq = fromJson || (body ? faqFromBody(body) : null);
   if (faq) faq["@id"] = `${url}#faq`;
@@ -142,18 +142,28 @@ export function comparisonTable(camp) {
 // FAQ：單一資料源。畫面上的問答與 FAQPage schema 都從 content/camps/<slug>.json 的 faq 產生，
 // 兩邊不可能對不上（對不上就是 cloaking）。
 // roblox 頁的 FAQ 是官網原本就做好的獨立設計，保留原樣，schema 改用 body 掃描（見 faqFromBody）。
+// 價格代換：body、FAQ、schema 三處共用同一個 resolver，避免某一處漏掉
+export function priceFill(text, camp, common) {
+  const pr = { ...(common.pricing_defaults || {}), ...(camp.pricing || {}) };
+  return String(text)
+    .replace(/\{\{PRICE_LIST\}\}/g, pr.list ?? "")
+    .replace(/\{\{PRICE_EARLY\}\}/g, pr.early_bird ?? "")
+    .replace(/\{\{ALUMNI_DISCOUNT\}\}/g, pr.alumni_discount ?? "")
+    .replace(/\{\{BOOKING_DISCOUNT\}\}/g, pr.booking_discount ?? "");
+}
+
 export function faqSection(camp, common) {
   const faq = camp.faq;
   if (!Array.isArray(faq) || faq.length === 0) return "";
   const items = faq.map((x) =>
-    `<details class="oa-faq-item"><summary>${esc(applySeasonText(x.q, common))}</summary>` +
-    `<div class="oa-faq-a">${applySeasonText(x.a, common).split("\n").map((p) => `<p>${esc(p)}</p>`).join("")}</div></details>`
+    `<details class="oa-faq-item"><summary>${esc(applySeasonText(x.q, common, camp))}</summary>` +
+    `<div class="oa-faq-a">${applySeasonText(x.a, common, camp).split("\n").map((p) => `<p>${esc(p)}</p>`).join("")}</div></details>`
   ).join("");
   return '<section class="oa-faq"><div class="oa-faq-inner">' +
     `<h2>${esc(camp.name)}常見問題</h2>${items}</div></section>`;
 }
 
-const applySeasonText = (t, common) => applySeason(t, common);
+const applySeasonText = (t, common, camp) => priceFill(applySeason(t, common), camp || {}, common);
 
 // 「其他營隊」內鏈區塊：每頁列出其他營隊，依年級由小到大排，方便家長找到對的年齡。
 // 目的有兩個：①家長進錯頁時有地方去（營隊頁每月 6,700 次點擊，這些人已經有意願）
