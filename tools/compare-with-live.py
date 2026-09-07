@@ -55,8 +55,9 @@ def asset_names(text: str) -> set[str]:
 
 
 def main(slug: str, live_path: str | None) -> None:
-    live = Path(live_path).read_text(encoding="utf-8") if live_path else fetch(f"{SITE}/camps/{slug}")
-    mine_path = ROOT / "dist" / slug / "index.html"
+    url = f"{SITE}/camps" if slug == "index" else f"{SITE}/camps/{slug}"
+    live = Path(live_path).read_text(encoding="utf-8") if live_path else fetch(url)
+    mine_path = ROOT / "dist" / "index.html" if slug == "index" else ROOT / "dist" / slug / "index.html"
     if not mine_path.exists():
         sys.exit(f"找不到 {mine_path}，先跑 npm run build")
     mine = mine_path.read_text(encoding="utf-8")

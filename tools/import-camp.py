@@ -31,8 +31,10 @@ def fetch(url: str) -> bytes:
         return r.read()
 
 
-def main(slug: str, src_path: str | None) -> None:
-    raw = Path(src_path).read_text(encoding="utf-8") if src_path else fetch(f"{SITE}/camps/{slug}").decode("utf-8")
+def main(slug: str, src_path: str | None, asset_dir: str | None = None) -> None:
+    asset_dir = asset_dir or slug   # 總覽頁的 slug 是 index，但頁面網址是 /camps
+    url = f"{SITE}/camps" if slug == "index" else f"{SITE}/camps/{slug}"
+    raw = Path(src_path).read_text(encoding="utf-8") if src_path else fetch(url).decode("utf-8")
 
     # ① 主體
     he = re.search(r"</header>", raw)
@@ -75,7 +77,7 @@ def main(slug: str, src_path: str | None) -> None:
     def rewrite(text: str, prefix: str) -> str:
         def repl(m):
             path, digest, ext = m.group(1), m.group(2), m.group(3)
-            own = f"camps/{slug}/"
+            own = f"camps/{asset_dir}/"
             if path.startswith(own):
                 rel = f"{slug}/{path[len(own):]}.{ext}"
             else:
@@ -130,4 +132,4 @@ def main(slug: str, src_path: str | None) -> None:
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         sys.exit(__doc__)
-    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None, sys.argv[3] if len(sys.argv) > 3 else None)

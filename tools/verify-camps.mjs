@@ -2,7 +2,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildAll, readSources, campFiles, readCamp, OUTPUT_DIR, pageUrl, basePath } from "./build-camps.mjs";
+import { buildAll, readSources, campFiles, readCamp, OUTPUT_DIR, pageUrl, basePath, outDir } from "./build-camps.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 let pass = 0;
@@ -22,7 +22,7 @@ check("每份 JSON 都產生一頁", built.length === camps.length);
 
 for (const camp of camps) {
   const tag = `[${camp.slug}]`;
-  const file = join(OUTPUT_DIR, camp.slug, "index.html");
+  const file = join(outDir(camp.slug), "index.html");
   if (!existsSync(file)) { check(`${tag} 頁面產生`, false); continue; }
   const html = readFileSync(file, "utf8");
   const text = textOf(html);
@@ -182,8 +182,9 @@ for (const camp of camps) {
   check(`${tag} 表單下拉無未開課營隊`, !opts.some((o) => NOT_RUNNING.some((w) => o.includes(w))), opts.join(","));
 
   // 「其他營隊」內鏈區塊
+  // 總覽頁本身就是全部營隊的清單，不需要再掛一份「其他營隊」
   const ocBlock = html.match(/<section class="oa-other-camps">[\s\S]*?<\/section>/);
-  check(`${tag} 有「其他營隊」內鏈區塊`, !!ocBlock);
+  if (camp.slug !== "index") check(`${tag} 有「其他營隊」內鏈區塊`, !!ocBlock);
   if (ocBlock) {
     const linked = [...ocBlock[0].matchAll(/href="\/camps\/([a-z_]+)"/g)].map((m) => m[1]);
     check(`${tag} 內鏈不連自己`, !linked.includes(camp.slug));
@@ -222,9 +223,9 @@ for (const camp of camps) {
         pFoot = at(/<oa-footer>/);
   if (pInfo >= 0 && pFaq >= 0) check(`${tag} FAQ 在營隊資訊之前`, pFaq < pInfo, `FAQ ${pFaq} / 資訊 ${pInfo}`);
   if (pInfo >= 0 && pStage >= 0) check(`${tag} 梯次在營隊資訊之後`, pStage > pInfo);
-  check(`${tag} 其他營隊在最後一段內容`, pOther > pInfo && pOther > pFaq);
-  if (pStage >= 0) check(`${tag} 其他營隊在梯次之後`, pOther > pStage);
-  check(`${tag} 官網 footer 在最後`, pFoot > pOther);
+  if (pOther >= 0) check(`${tag} 其他營隊在最後一段內容`, pOther > pInfo && pOther > pFaq);
+  if (pStage >= 0 && pOther >= 0) check(`${tag} 其他營隊在梯次之後`, pOther > pStage);
+  check(`${tag} 官網 footer 在最後`, pFoot > Math.max(pOther, pFaq, pInfo));
   check(`${tag} 無殘留的 fbq 追蹤碼（由 shell 管）`, !/fbq\(/.test(html));
   // 手機破版的常見來源：inline 寫死一個比手機還寬的固定寬度（gai 頁原本 700px，390px 螢幕會橫向溢出）
   const rigid = [...html.matchAll(/style="[^"]*?(?<!max-)width: (\d{3,4})px/g)]
@@ -267,7 +268,7 @@ for (const camp of camps) {
 {
   // 頁面 HTML ＋ 各頁 CSS 都要算進去：背景圖多半只出現在 CSS 裡
   const sources = [
-    ...camps.map((c) => join(OUTPUT_DIR, c.slug, "index.html")),
+    ...camps.map((c) => join(outDir(c.slug), "index.html")),
     ...camps.map((c) => join(OUTPUT_DIR, "css", `${c.slug}-inline.css`)),
   ];
   const allHtml = sources.filter(existsSync).map((f) => readFileSync(f, "utf8")).join("\n");
@@ -283,17 +284,6 @@ for (const camp of camps) {
   const shared = readFileSync(join(OUTPUT_DIR, "css", "camps-shared.css"), "utf8");
   check("手機防溢出規則存在", /@media \(max-width: 767\.98px\)[\s\S]*overflow-x: hidden/.test(shared));
   check("手機圖片限寬規則存在", /\.oa-camp-page img[\s\S]{0,120}max-width: 100% !important/.test(shared));
-  // 預覽建置必須產出索引頁，否則預覽站的根網址會是 404（2026-09-06 就漏過一次：
-  // 驗收會重跑 build 清空 dist，CI 的驗收步驟忘了帶 OA_PREVIEW_INDEX）
-  if (process.env.OA_PREVIEW_INDEX) {
-    const idx = join(OUTPUT_DIR, "index.html");
-    check("預覽建置有索引頁", existsSync(idx));
-    if (existsSync(idx)) {
-      const h = readFileSync(idx, "utf8");
-      check("索引頁列出所有營隊頁", camps.every((c) => h.includes(`/${c.slug}/`)));
-      check("索引頁為 noindex", /content="noindex/.test(h));
-    }
-  }
 }
 
 const sitemap = readFileSync(join(OUTPUT_DIR, "sitemap.xml"), "utf8");

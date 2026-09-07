@@ -7,7 +7,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const OUTPUT_DIR = join(ROOT, "dist");
 export const SITE = "https://orangeapple.co";
 
-export const pageUrl = (slug) => `${SITE}/camps/${slug}`;
+// 總覽頁的 slug 是 index，網址是 /camps（不是 /camps/index）
+export const pageUrl = (slug) => (slug === "index" ? `${SITE}/camps` : `${SITE}/camps/${slug}`);
+export const outDir = (slug) => (slug === "index" ? OUTPUT_DIR : join(OUTPUT_DIR, slug));
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export function campFiles() {
@@ -196,6 +198,15 @@ export function buildAll({ quiet = false } = {}) {
       .replace(/\{\{PRICE_EARLY\}\}/g, pr.early_bird ?? "")
       .replace(/\{\{ALUMNI_DISCOUNT\}\}/g, pr.alumni_discount ?? "")
       .replace(/\{\{BOOKING_DISCOUNT\}\}/g, pr.booking_discount ?? "");
+    // 總覽頁引用各營隊自己的價格：{{PRICE:<slug>:early|list}}
+    // 這樣總覽頁與子頁的價格不可能對不上（官網原本是兩邊各寫一次）
+    body = body.replace(/\{\{PRICE:([a-z_]+):(early|list)\}\}/g, (_, s2, kind) => {
+      const c = allCamps.find((x) => x.slug === s2);
+      if (!c || !c.pricing) throw new Error(`${camp.slug}: 找不到 ${s2} 的 pricing`);
+      const v = kind === "early" ? c.pricing.early_bird : c.pricing.list;
+      if (!v) throw new Error(`${camp.slug}: ${s2} 的 pricing.${kind} 是空的`);
+      return v;
+    });
     if (table) body = body.replace(/\{\{COMPARISON_DESKTOP\}\}/g, table).replace(/\{\{COMPARISON_MOBILE\}\}/g, table);
     body = body.replace(/\{\{FAQ\}\}/g, faqSection(camp, common));
     body = body.replace(/\{\{OTHER_CAMPS\}\}/g, otherCampsBlock(camp, allCamps));
@@ -210,34 +221,13 @@ export function buildAll({ quiet = false } = {}) {
       .replace(/\{\{OG_IMAGE\}\}/g, `${assetOrigin()}${basePath(common)}/assets/${camp.og_image}`)
       .replace("{{GRAPH_JSON_LD}}", graphJsonLd(camp, title, description, url, body, common))
       .replace("{{BODY}}", body);
-    mkdirSync(join(OUTPUT_DIR, camp.slug), { recursive: true });
-    writeFileSync(join(OUTPUT_DIR, camp.slug, "index.html"), html, "utf8");
+    mkdirSync(outDir(camp.slug), { recursive: true });
+    writeFileSync(join(outDir(camp.slug), "index.html"), html, "utf8");
     results.push({ slug: camp.slug, name: camp.name, bytes: html.length });
-    if (!quiet) console.log(`  ${camp.slug.padEnd(12)} ${camp.name.padEnd(10)} ${String(Math.round(html.length / 1024)).padStart(3)} KB  → dist/${camp.slug}/index.html`);
+    if (!quiet) console.log(`  ${camp.slug.padEnd(12)} ${camp.name.padEnd(10)} ${String(Math.round(html.length / 1024)).padStart(3)} KB  → ${camp.slug === "index" ? "dist/index.html" : `dist/${camp.slug}/index.html`}`);
   }
   // 預覽站的索引頁：只在 OA_BASE 有設定時產生（＝GitHub Pages 預覽）。
   // 🔴 正式站不能有這一頁——那邊的 /camps 是官網自己的營隊總覽頁，蓋掉就出事。
-  // 只有 CI 的預覽建置才產生（Action 會設 OA_PREVIEW_INDEX）。
-  // 本機不產生的原因：pre-push 的 preflight hook 會抓 repo 裡第一個 index.html 來檢查，
-  // 抓到這頁就會誤報「缺 description／canonical／FAQPage」——它是索引頁不是營隊頁。
-  if (process.env.OA_PREVIEW_INDEX) {
-    const rows = results.map((r) => `<li><a href="${basePath(common)}/${r.slug}/">${r.name}</a> <code>/camps/${r.slug}</code></li>`).join("\n");
-    writeFileSync(join(OUTPUT_DIR, "index.html"),
-      `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>橘子蘋果營隊頁預覽索引（${results.length} 頁）</title>
-<meta name="description" content="橘子蘋果寒暑假營隊頁的內部預覽索引，供行銷部看稿使用。正式網址是 orangeapple.co/camps/…。">
-<meta property="og:title" content="橘子蘋果營隊頁預覽索引">
-<meta property="og:description" content="內部看稿用的預覽索引，不是正式站。">
-<style>body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:640px;margin:3rem auto;padding:0 1.2rem;line-height:1.8;color:#2D2E32}
-h1{font-size:1.4rem}li{margin:.4rem 0}code{color:#777;font-size:.85em}a{color:#0a58ca}</style></head>
-<body><h1>營隊頁預覽（${results.length} 頁）</h1>
-<p>這是給行銷部看稿用的預覽，不是正式站。正式網址是 <code>orangeapple.co/camps/…</code>。</p>
-<ul>\n${rows}\n</ul></body></html>\n`, "utf8");
-    if (!quiet) console.log("  預覽索引頁                            → dist/index.html");
-  }
-
   const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     results.map((r) => `  <url><loc>${pageUrl(r.slug)}</loc></url>`).join("\n") + "\n</urlset>\n";
   writeFileSync(join(OUTPUT_DIR, "sitemap.xml"), sitemap, "utf8");

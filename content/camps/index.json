@@ -1,0 +1,35 @@
+{
+  "slug": "index",
+  "name": "寒暑假營隊",
+  "body": "index.html",
+  "meta": {
+    "title": "{{SEASON}}{{SEASON_TYPE}}｜橘子蘋果兒童程式營隊｜麥塊、Roblox、Python、AI",
+    "description": "橘子蘋果{{SEASON}}營隊總覽：麥塊、Roblox、Python、AI 互動藝術、財商數學、STEAM 小小創客與 APCS 檢定，國小一年級到高三都有適合的主題。遊戲化引導式教學，每堂課都能累積作品。"
+  },
+  "courses_for_schema": [],
+  "og_image": "_site/camps/index/thumb_camp-02@2x.png",
+  "expect": {
+    "_why": "總覽頁：材質模組設計營本季不開，卡片已移除；APCS 實體不開，卡片導向線上營隊並改標「本季僅線上開課」。",
+    "must_not_contain": [
+      "材質模組設計營",
+      "材質營"
+    ],
+    "must_contain": [
+      "小小創客營",
+      "財商數學創客營",
+      "Roblox",
+      "Python",
+      "APCS"
+    ],
+    "h1_contains": [
+      "冬令營"
+    ]
+  },
+  "not_running_assets": {
+    "_why": "總覽頁上「麥塊大師–材質模組設計營」那張卡片的縮圖。本季不開，卡片已移除。",
+    "files": [
+      "index/thumb_camp-09.png",
+      "index/thumb_camp-09@2x.png"
+    ]
+  }
+}
