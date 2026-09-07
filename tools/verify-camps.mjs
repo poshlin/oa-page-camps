@@ -180,6 +180,18 @@ for (const camp of camps) {
     }
     check(`${tag} 內鏈沒有彩色 emoji`, !/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(ocBlock[0]));
   }
+  // H1：每頁都要有，而且是描述營隊的標題（不是口號）。桌機／手機兩份版型會有兩個，內容要一樣。
+  const h1s = (html.match(/<h1[^>]*>[\s\S]*?<\/h1>/g) || []);
+  check(`${tag} 有 h1`, h1s.length > 0);
+  // <br> 要當成空白，不然桌機版「STEAM 小小創客」跟手機版「STEAM<br>小小創客」會被判成不一樣
+  const h1text = h1s.map((x) =>
+    (x.replace(/<br\s*\/?>/gi, " ").replace(/<[^>]+>/g, "").replace(/\s+/g, "").trim()
+      || (x.match(/alt="([^"]*)"/) || [])[1] || ""));
+  check(`${tag} h1 內容一致（桌機／手機）`, new Set(h1text).size <= 1, h1text.join("｜"));
+  if (expect.h1_contains) {
+    for (const w of expect.h1_contains) check(`${tag} h1 含「${w}」`, h1text.every((t) => t.includes(w)), h1text.join("｜"));
+  }
+
   check(`${tag} 有共用樣式表`, html.includes("camps-shared.css"));
 
   // 版型與紅線

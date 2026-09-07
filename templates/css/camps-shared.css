@@ -32,3 +32,8 @@ p.oa-oc-note {
   border-left: 3px solid #FFA300;
 }
 p.oa-oc-note a { color: #2D2E32; font-weight: 700; text-decoration: underline; text-decoration-color: #FFA300; }
+
+/* 有些頁的主標題本身就是一張圖（例如 gai）。把圖包成 h1 讓它有標題語意，
+   alt 就是畫面上看得到的字，不是隱藏文字。h1 預設的字級與邊距要歸零，
+   否則會把原本的版面撐開。 */
+h1.oa-title-h1 { margin: 0; padding: 0; font-size: inherit; line-height: inherit; }

@@ -18,6 +18,9 @@
     "must_contain": [
       "財商",
       "理財"
+    ],
+    "h1_contains": [
+      "冬令營"
     ]
   },
   "og_image": "financial_quotient/og_image.png",

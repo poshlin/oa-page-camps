@@ -18,6 +18,9 @@
     "must_contain": [
       "小小創客營",
       "STEAM"
+    ],
+    "h1_contains": [
+      "冬令營"
     ]
   },
   "og_image": "_site/camps/index/thumb_camp-01@2x.png",

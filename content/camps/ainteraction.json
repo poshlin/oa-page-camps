@@ -19,6 +19,9 @@
     ],
     "must_contain": [
       "AI 互動藝術營"
+    ],
+    "h1_contains": [
+      "冬令營"
     ]
   },
   "og_image": "ainteraction/og_image.png",

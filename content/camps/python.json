@@ -17,6 +17,9 @@
     "must_not_contain": [],
     "must_contain": [
       "Python"
+    ],
+    "h1_contains": [
+      "冬令營"
     ]
   },
   "og_image": "_site/camps/index/thumb_camp-04@2x.png",

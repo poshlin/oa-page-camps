@@ -27,7 +27,10 @@
       "Roblox Studio"
     ],
     "price_groups": 2,
-    "rwd_dual_html": true
+    "rwd_dual_html": true,
+    "h1_contains": [
+      "冬令營"
+    ]
   },
   "og_image": "roblox/og_image.jpg",
   "grade_short": "小三到小六",
