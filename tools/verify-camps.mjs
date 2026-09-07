@@ -204,6 +204,18 @@ for (const camp of camps) {
 
   check(`${tag} 有共用樣式表`, html.includes("camps-shared.css"));
   check(`${tag} 有 .oa-camp-page 外框（手機防溢出規則靠它生效）`, html.includes('class="oa-camp-page"'));
+  // 🔴 區塊順序：營隊資訊 → 梯次（Corp 注入）→ FAQ → 其他營隊 → 官網 footer。
+  // 2026-09-06 麥塊頁曾把 FAQ 插到整頁最上面（插入點抓到 body 裡第一個 <script> 而不是最後一個）。
+  const at = (re) => { const m = html.match(re); return m ? html.indexOf(m[0]) : -1; };
+  const pInfo = at(/營隊資訊/), pStage = at(/<turbo-frame[^>]*id="get_stages"/),
+        pFaq = at(/<section class="oa-faq">/), pOther = at(/<section class="oa-other-camps">/),
+        pFoot = at(/<oa-footer>/);
+  if (pInfo >= 0 && pFaq >= 0) check(`${tag} FAQ 在營隊資訊之後`, pFaq > pInfo);
+  if (pStage >= 0 && pFaq >= 0) check(`${tag} FAQ 在梯次區塊之後`, pFaq > pStage);
+  if (pStage >= 0 && pOther >= 0) check(`${tag} 其他營隊在梯次區塊之後`, pOther > pStage);
+  if (pFaq >= 0) check(`${tag} 其他營隊在 FAQ 之後`, pOther > pFaq);
+  check(`${tag} 官網 footer 在最後`, pFoot > pOther);
+  check(`${tag} 無殘留的 fbq 追蹤碼（由 shell 管）`, !/fbq\(/.test(html));
   // 手機破版的常見來源：inline 寫死一個比手機還寬的固定寬度（gai 頁原本 700px，390px 螢幕會橫向溢出）
   const rigid = [...html.matchAll(/style="[^"]*?(?<!max-)width: (\d{3,4})px/g)]
     .map((m) => Number(m[1])).filter((w) => w >= 400);
