@@ -61,7 +61,7 @@ python3 tools/compare-with-live.py <slug>    # 跟官網現行頁對照，看掉
 
 ```bash
 npm run build                          # BASE = /camps（吃 camps_common.json 的 base_path）
-OA_BASE=/oa-page-camps npm run build   # BASE = /oa-page-camps（GitHub Action 用這個）
+OA_BASE=/oa-page-camps OA_ORIGIN=https://poshlin.github.io OA_PREVIEW_INDEX=1 npm run build   # 預覽站（GitHub Action 用這組）
 ```
 
 ---
