@@ -65,6 +65,12 @@ for (const camp of camps) {
   const basedRefs = (html.match(new RegExp(`"${BASE}/(assets|css)/`, "g")) || []).length;
   check(`${tag} 資產都帶 BASE 前綴`, basedRefs >= 2, `僅 ${basedRefs} 處`);
   check(`${tag} 未殘留 BASE placeholder`, !html.includes("{{BASE}}"));
+  // 價格一律從 JSON 來：HTML 裡不該再有寫死的金額（改價才不會漏改某一處）
+  const money = [...html.matchAll(/(?:一般價|定價|晚鳥優惠價|再折|價值＄|省下＄)[^<\n]{0,12}/g)].map((m) => m[0]);
+  const pricing = { ...(common.pricing_defaults || {}), ...(camp.pricing || {}) };
+  const allowed = [pricing.list, pricing.early_bird, pricing.alumni_discount, pricing.booking_discount].filter(Boolean);
+  const stray = money.filter((m) => /[\d,]{3,}/.test(m) && !allowed.some((v) => m.includes(v)));
+  check(`${tag} 金額都來自 JSON`, stray.length === 0, stray.slice(0, 3).join("｜"));
   // 正式建置不該有預覽站網址（註解不算——robots 上方那段說明會提到它）
   const noComments = html.replace(/<!--[\s\S]*?-->/g, "");
   check(`${tag} 正式建置無預覽站網址`, BASE !== "/camps" || !noComments.includes("poshlin.github.io"));

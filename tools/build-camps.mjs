@@ -189,7 +189,13 @@ export function buildAll({ quiet = false } = {}) {
     const bodyPath = join(ROOT, "templates", "bodies", camp.body);
     if (!existsSync(bodyPath)) throw new Error(`${camp.slug}: 找不到 body 檔 ${camp.body}`);
     const table = comparisonTable(camp);
-    let body = applySeason(readFileSync(bodyPath, "utf8"), common);
+    // 價格：改 content/camps/<slug>.json 的 pricing，不要動 HTML
+    const pr = { ...(common.pricing_defaults || {}), ...(camp.pricing || {}) };
+    let body = applySeason(readFileSync(bodyPath, "utf8"), common)
+      .replace(/\{\{PRICE_LIST\}\}/g, pr.list ?? "")
+      .replace(/\{\{PRICE_EARLY\}\}/g, pr.early_bird ?? "")
+      .replace(/\{\{ALUMNI_DISCOUNT\}\}/g, pr.alumni_discount ?? "")
+      .replace(/\{\{BOOKING_DISCOUNT\}\}/g, pr.booking_discount ?? "");
     if (table) body = body.replace(/\{\{COMPARISON_DESKTOP\}\}/g, table).replace(/\{\{COMPARISON_MOBILE\}\}/g, table);
     body = body.replace(/\{\{FAQ\}\}/g, faqSection(camp, common));
     body = body.replace(/\{\{OTHER_CAMPS\}\}/g, otherCampsBlock(camp, allCamps));

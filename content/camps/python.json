@@ -51,5 +51,10 @@
       "a": "需要自備筆記型電腦。作業系統要 Windows 7 以上或 macOS High Sierra（10.13）以上，處理器建議 Intel Core i3-3210 或 AMD A8-7600 APU 以上的同級效能。完整規格可以看頁面上的「點此查看設備需求」。"
     }
   ],
-  "_faq_source": "答案只用頁面既有事實：國一到高三、基礎語法課表、6 款遊戲作品終生帶走、從 0 開發整套專案、ITS Python 認證班可加購、知名服務使用 Python、筆電規格。🔴 刻意不寫頁面上的「通過率 100%」（記憶 feedback_oa_its_cert_order 禁用通過率宣稱）。"
+  "_faq_source": "答案只用頁面既有事實：國一到高三、基礎語法課表、6 款遊戲作品終生帶走、從 0 開發整套專案、ITS Python 認證班可加購、知名服務使用 Python、筆電規格。🔴 刻意不寫頁面上的「通過率 100%」（記憶 feedback_oa_its_cert_order 禁用通過率宣稱）。",
+  "pricing": {
+    "_why": "價格改這裡，不要改 templates/bodies 的 HTML。",
+    "list": "15,000",
+    "early_bird": "10,990"
+  }
 }

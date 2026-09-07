@@ -56,5 +56,10 @@
       "a": "為了維持教學效果，實際內容可能依現場狀況微調。梯次也保有關閉或合併的權力；若因課程調整導致孩子無法參與，橘子蘋果會全額退款。"
     }
   ],
-  "_faq_source": "答案只用頁面既有事實：適合對象小二到小三、程式＋數學＋財商的設計、4 款積木新專案、麥思小恐龍與拍拍巫師、Apitor、設備需求（Android 10＋／iPadOS 10.3＋）、微調與退款條款。🔴 刻意不寫 AoPS（記憶 feedback_oa_aops_naming_policy：官網不具名）。設備：財商數學營是實體營隊，Android 與 iPad 都可以；只限 iPad 的是線上的財商素養課程，兩者是不同產品，見記憶 project_oa_device_specs。"
+  "_faq_source": "答案只用頁面既有事實：適合對象小二到小三、程式＋數學＋財商的設計、4 款積木新專案、麥思小恐龍與拍拍巫師、Apitor、設備需求（Android 10＋／iPadOS 10.3＋）、微調與退款條款。🔴 刻意不寫 AoPS（記憶 feedback_oa_aops_naming_policy：官網不具名）。設備：財商數學營是實體營隊，Android 與 iPad 都可以；只限 iPad 的是線上的財商素養課程，兩者是不同產品，見記憶 project_oa_device_specs。",
+  "pricing": {
+    "_why": "價格改這裡，不要改 templates/bodies 的 HTML。",
+    "list": "12,500",
+    "early_bird": "9,990"
+  }
 }

@@ -34,5 +34,10 @@
   },
   "og_image": "roblox/og_image.jpg",
   "grade_short": "小三到小六",
-  "grade_source": "比較表「適合」列：遊戲設計營 3-6 年級、勇闖地下城 5-6 年級"
+  "grade_source": "比較表「適合」列：遊戲設計營 3-6 年級、勇闖地下城 5-6 年級",
+  "pricing": {
+    "_why": "價格改這裡，不要改 templates/bodies 的 HTML。",
+    "list": "12,500",
+    "early_bird": "9,990"
+  }
 }
