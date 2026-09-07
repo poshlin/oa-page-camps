@@ -19,12 +19,17 @@
 排名是多年資產，砍掉明年要重來。正解是換掉承諾、導流到有開的營隊。
 
 ```bash
-npm run build   # 產生 dist/
-npm test        # 351 項驗收斷言，全過才准 push
+npm run build         # 產生 dist/
+npm test              # 579 項驗收斷言，全過才准 push
+npm run season-check  # 換季演練：切成另一季重建、檢查殘留、再還原
 
 python3 tools/import-camp.py <slug>          # 從官網再搬一頁進來
 python3 tools/compare-with-live.py <slug>    # 跟官網現行頁對照，看掉了什麼
 ```
+
+🔴 **每季真的要換季之前，先跑 `npm run season-check`。** 它會把 `camps_common.json` 暫時切成另一季、
+重建 9 頁、檢查有沒有哪一頁把季節寫死，然後還原。有殘留就代表那頁要改成
+`{{SEASON}}` / `{{SEASON_TYPE}}` / `{{SEASON_WORD}}` 參數。
 
 ---
 
