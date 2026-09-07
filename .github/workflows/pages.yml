@@ -24,7 +24,9 @@ jobs:
       - name: 建置（預覽前綴）
         run: OA_BASE=/oa-page-camps OA_ORIGIN=https://poshlin.github.io OA_PREVIEW_INDEX=1 npm run build
       - name: 驗收
-        run: OA_BASE=/oa-page-camps OA_ORIGIN=https://poshlin.github.io npm test
+        # 🔴 驗收會重跑一次 build（dist 每次都清空重建），所以這裡也要帶 OA_PREVIEW_INDEX，
+        #    否則驗收跑完索引頁就沒了，部署上去的 / 會是 404。
+        run: OA_BASE=/oa-page-camps OA_ORIGIN=https://poshlin.github.io OA_PREVIEW_INDEX=1 npm test
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

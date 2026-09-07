@@ -261,6 +261,17 @@ for (const camp of camps) {
   const shared = readFileSync(join(OUTPUT_DIR, "css", "camps-shared.css"), "utf8");
   check("手機防溢出規則存在", /@media \(max-width: 767\.98px\)[\s\S]*overflow-x: hidden/.test(shared));
   check("手機圖片限寬規則存在", /\.oa-camp-page img[\s\S]{0,120}max-width: 100% !important/.test(shared));
+  // 預覽建置必須產出索引頁，否則預覽站的根網址會是 404（2026-09-06 就漏過一次：
+  // 驗收會重跑 build 清空 dist，CI 的驗收步驟忘了帶 OA_PREVIEW_INDEX）
+  if (process.env.OA_PREVIEW_INDEX) {
+    const idx = join(OUTPUT_DIR, "index.html");
+    check("預覽建置有索引頁", existsSync(idx));
+    if (existsSync(idx)) {
+      const h = readFileSync(idx, "utf8");
+      check("索引頁列出所有營隊頁", camps.every((c) => h.includes(`/${c.slug}/`)));
+      check("索引頁為 noindex", /content="noindex/.test(h));
+    }
+  }
 }
 
 const sitemap = readFileSync(join(OUTPUT_DIR, "sitemap.xml"), "utf8");
