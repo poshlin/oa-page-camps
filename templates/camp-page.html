@@ -35,7 +35,11 @@
 <body>
   <oa-header></oa-header>
 
+  <!-- 這層 wrapper 是我們自己加的，給 camps-shared.css 一個穩定的選擇器用
+       （9 頁各自的最外層 class 都不一樣）。它只是一個沒有樣式的 div。 -->
+  <div class="oa-camp-page">
 {{BODY}}
+  </div>
 
   <oa-footer></oa-footer>
 </body>

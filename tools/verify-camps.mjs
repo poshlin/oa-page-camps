@@ -65,6 +65,16 @@ for (const camp of camps) {
   const basedRefs = (html.match(new RegExp(`"${BASE}/(assets|css)/`, "g")) || []).length;
   check(`${tag} 資產都帶 BASE 前綴`, basedRefs >= 2, `僅 ${basedRefs} 處`);
   check(`${tag} 未殘留 BASE placeholder`, !html.includes("{{BASE}}"));
+  // 正式建置不該有預覽站網址（註解不算——robots 上方那段說明會提到它）
+  const noComments = html.replace(/<!--[\s\S]*?-->/g, "");
+  check(`${tag} 正式建置無預覽站網址`, BASE !== "/camps" || !noComments.includes("poshlin.github.io"));
+  // JSON-LD 重複 key：JSON.parse 不會報錯，但 Google 會把整份判成無法解析
+  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    const keys = [...m[1].matchAll(/"(@?\w+)":/g)].map((x) => x[1]);
+    const top = m[1].match(/"@graph"/g) || [];
+    check(`${tag} JSON-LD 可被 JSON.parse`, (() => { try { JSON.parse(m[1]); return true; } catch { return false; } })());
+    check(`${tag} JSON-LD 有 @graph`, top.length === 1, `${top.length} 個`);
+  }
   // canonical／og:url 本來就是官網絕對網址，這裡只擋「外部載入的資源」（追蹤碼與字型圖示由 shell 管）
   const extLinks = (html.match(/<link[^>]*>/g) || []).filter((t) => t.includes("stylesheet") && /href="https?:/.test(t));
   check(`${tag} 無外部樣式表`, extLinks.length === 0, extLinks.join(" "));
@@ -193,6 +203,11 @@ for (const camp of camps) {
   }
 
   check(`${tag} 有共用樣式表`, html.includes("camps-shared.css"));
+  check(`${tag} 有 .oa-camp-page 外框（手機防溢出規則靠它生效）`, html.includes('class="oa-camp-page"'));
+  // 手機破版的常見來源：inline 寫死一個比手機還寬的固定寬度（gai 頁原本 700px，390px 螢幕會橫向溢出）
+  const rigid = [...html.matchAll(/style="[^"]*?(?<!max-)width: (\d{3,4})px/g)]
+    .map((m) => Number(m[1])).filter((w) => w >= 400);
+  check(`${tag} 無寫死的超寬固定寬度`, rigid.length === 0, rigid.join(","));
 
   // 版型與紅線
   check(`${tag} 保留 header/footer 注入錨點`, html.includes("<oa-header></oa-header>") && html.includes("<oa-footer></oa-footer>"));
@@ -239,6 +254,13 @@ for (const camp of camps) {
       e.isDirectory() ? walk(join(dir, e.name), `${prefix}${e.name}/`) : [`${prefix}${e.name}`]);
   const orphans = walk(join(OUTPUT_DIR, "assets")).filter((f) => !allHtml.includes(f));
   check("assets 無孤兒檔", orphans.length === 0, orphans.slice(0, 5).join(","));
+}
+
+
+{
+  const shared = readFileSync(join(OUTPUT_DIR, "css", "camps-shared.css"), "utf8");
+  check("手機防溢出規則存在", /@media \(max-width: 767\.98px\)[\s\S]*overflow-x: hidden/.test(shared));
+  check("手機圖片限寬規則存在", /\.oa-camp-page img[\s\S]{0,120}max-width: 100% !important/.test(shared));
 }
 
 const sitemap = readFileSync(join(OUTPUT_DIR, "sitemap.xml"), "utf8");

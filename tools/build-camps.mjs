@@ -211,13 +211,19 @@ export function buildAll({ quiet = false } = {}) {
   }
   // 預覽站的索引頁：只在 OA_BASE 有設定時產生（＝GitHub Pages 預覽）。
   // 🔴 正式站不能有這一頁——那邊的 /camps 是官網自己的營隊總覽頁，蓋掉就出事。
-  if (process.env.OA_BASE) {
+  // 只有 CI 的預覽建置才產生（Action 會設 OA_PREVIEW_INDEX）。
+  // 本機不產生的原因：pre-push 的 preflight hook 會抓 repo 裡第一個 index.html 來檢查，
+  // 抓到這頁就會誤報「缺 description／canonical／FAQPage」——它是索引頁不是營隊頁。
+  if (process.env.OA_PREVIEW_INDEX) {
     const rows = results.map((r) => `<li><a href="${basePath(common)}/${r.slug}/">${r.name}</a> <code>/camps/${r.slug}</code></li>`).join("\n");
     writeFileSync(join(OUTPUT_DIR, "index.html"),
       `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>營隊頁預覽索引</title>
+<title>橘子蘋果營隊頁預覽索引（${results.length} 頁）</title>
+<meta name="description" content="橘子蘋果寒暑假營隊頁的內部預覽索引，供行銷部看稿使用。正式網址是 orangeapple.co/camps/…。">
+<meta property="og:title" content="橘子蘋果營隊頁預覽索引">
+<meta property="og:description" content="內部看稿用的預覽索引，不是正式站。">
 <style>body{font-family:system-ui,"Noto Sans TC",sans-serif;max-width:640px;margin:3rem auto;padding:0 1.2rem;line-height:1.8;color:#2D2E32}
 h1{font-size:1.4rem}li{margin:.4rem 0}code{color:#777;font-size:.85em}a{color:#0a58ca}</style></head>
 <body><h1>營隊頁預覽（${results.length} 頁）</h1>
