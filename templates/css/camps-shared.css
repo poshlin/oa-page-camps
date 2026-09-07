@@ -1,0 +1,34 @@
+/* 9 支營隊頁共用的「其他營隊」內鏈區塊。
+   放在每頁最尾端，樣式刻意做得樸素，才不會跟各頁自己的視覺打架。
+   🔴 品牌紅線：亮橘 #FFA300 對白底的對比度不足，不能拿來當文字色；
+      這裡連結一律用深墨 #2D2E32，只有 → 箭頭與 hover 底線用橘。 */
+.oa-other-camps {
+  background: #fff;
+  border-top: 1px solid #e8e5e0;
+  padding: 2.5rem 1rem 3rem;
+  font-family: "Noto Sans TC", system-ui, sans-serif;
+  color: #2D2E32;
+}
+.oa-other-camps .oa-oc-inner { max-width: 900px; margin: 0 auto; }
+.oa-other-camps h3 { font-size: 1.25rem; font-weight: 700; margin: 0 0 .35rem; color: #2D2E32; }
+.oa-other-camps .oa-oc-lead { font-size: .95rem; color: #55565a; margin: 0 0 1.1rem; }
+.oa-other-camps ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+@media (min-width: 768px) { .oa-other-camps ul { grid-template-columns: 1fr 1fr; gap: .55rem 2rem; } }
+.oa-other-camps li { display: flex; align-items: baseline; gap: .5rem; border-bottom: 1px dotted #e0ddd8; padding-bottom: .5rem; }
+.oa-other-camps a { color: #2D2E32; text-decoration: none; font-weight: 600; }
+.oa-other-camps a::before { content: "→"; color: #FFA300; margin-right: .4rem; font-weight: 700; }
+.oa-other-camps a:hover { text-decoration: underline; text-decoration-color: #FFA300; }
+.oa-other-camps .oa-oc-grade { font-size: .85rem; color: #6b6c70; margin-left: auto; white-space: nowrap; }
+.oa-other-camps .oa-oc-note { font-size: .85rem; color: #6b6c70; }
+
+/* 內文裡的情境連結（例如財商頁提到積木時順手連到小小創客營）。
+   這幾句不在「其他營隊」區塊裡，所以要有自己的樣式；刻意做得像補充說明，
+   不跟該頁自己的主文案搶顏色。 */
+p.oa-oc-note {
+  font-size: .95em;
+  color: #55565a;
+  margin-top: .6rem;
+  padding-left: .8rem;
+  border-left: 3px solid #FFA300;
+}
+p.oa-oc-note a { color: #2D2E32; font-weight: 700; text-decoration: underline; text-decoration-color: #FFA300; }

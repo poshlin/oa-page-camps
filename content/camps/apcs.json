@@ -9,7 +9,7 @@
   "courses_for_schema": [
     {
       "name": "APCS 檢定培訓營",
-      "grade": "國中至高中",
+      "grade": "國中二年級至高中三年級",
       "description": "針對 APCS 檢定的觀念與實作題型，系統學習 Python 演算法與解題技巧。"
     }
   ],
@@ -30,5 +30,7 @@
     ],
     "_why": "本季不開（gai 完全不開、apcs 只開線上），頁面不得再出現任何優惠、價格或報名承諾——但頁面要保留、不 noindex 也不 301，排名是多年資產。"
   },
-  "og_image": "_site/camps/index/thumb_camp-05@2x.png"
+  "og_image": "_site/camps/index/thumb_camp-05@2x.png",
+  "grade_short": "國二到高三",
+  "grade_source": "頁內「適合對象：國二到高三」"
 }

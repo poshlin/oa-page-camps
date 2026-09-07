@@ -165,6 +165,23 @@ for (const camp of camps) {
   const opts = [...html.matchAll(/<option[^>]*value="([^"]*)"/g)].map((m) => m[1]);
   check(`${tag} 表單下拉無未開課營隊`, !opts.some((o) => NOT_RUNNING.some((w) => o.includes(w))), opts.join(","));
 
+  // 「其他營隊」內鏈區塊
+  const ocBlock = html.match(/<section class="oa-other-camps">[\s\S]*?<\/section>/);
+  check(`${tag} 有「其他營隊」內鏈區塊`, !!ocBlock);
+  if (ocBlock) {
+    const linked = [...ocBlock[0].matchAll(/href="\/camps\/([a-z_]+)"/g)].map((m) => m[1]);
+    check(`${tag} 內鏈不連自己`, !linked.includes(camp.slug));
+    check(`${tag} 內鏈數量正確`, linked.length >= camps.length - 2, `${linked.length} 條`);
+    // 本季不開的營隊只能出現在它自己指定的來源頁，避免把家長導到不能報名的頁
+    for (const other of camps.filter((c) => c.not_running && c.slug !== camp.slug)) {
+      const allowed = (other.linked_from || []).includes(camp.slug);
+      check(`${tag} 未開課的「${other.slug}」${allowed ? "有" : "沒有"}出現在清單`,
+        linked.includes(other.slug) === allowed);
+    }
+    check(`${tag} 內鏈沒有彩色 emoji`, !/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(ocBlock[0]));
+  }
+  check(`${tag} 有共用樣式表`, html.includes("camps-shared.css"));
+
   // 版型與紅線
   check(`${tag} 保留 header/footer 注入錨點`, html.includes("<oa-header></oa-header>") && html.includes("<oa-footer></oa-footer>"));
   // 只有做了「桌機一份 HTML、手機一份 HTML」的頁才檢查（多數頁是純 CSS 響應式）

@@ -9,7 +9,7 @@
   "courses_for_schema": [
     {
       "name": "線上 APCS 檢定培訓營",
-      "grade": "國中至高中",
+      "grade": "國中二年級至高中三年級",
       "description": "線上直播小班制，系統化學習 APCS 觀念與實作題，不受地點限制。"
     }
   ],
@@ -23,5 +23,7 @@
     ],
     "_why": "全站營隊頁一律用「晚鳥」，只有這頁的 modal 殘留一句「3,000 元早鳥」跟畫面主視覺的「晚鳥 2,500」自相矛盾（2026-09-06 修）。"
   },
-  "og_image": "online/og_image.jpg"
+  "og_image": "online/og_image.jpg",
+  "grade_short": "國二到高三",
+  "grade_source": "頁內「線上營隊選擇 8-12年級 專屬」"
 }

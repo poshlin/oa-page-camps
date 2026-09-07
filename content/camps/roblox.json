@@ -29,5 +29,7 @@
     "price_groups": 2,
     "rwd_dual_html": true
   },
-  "og_image": "roblox/og_image.jpg"
+  "og_image": "roblox/og_image.jpg",
+  "grade_short": "小三到小六",
+  "grade_source": "比較表「適合」列：遊戲設計營 3-6 年級、勇闖地下城 5-6 年級"
 }

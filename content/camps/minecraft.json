@@ -125,5 +125,7 @@
     ],
     "rwd_dual_html": true
   },
-  "og_image": "_site/camps/index/thumb_camp-02@2x.png"
+  "og_image": "_site/camps/index/thumb_camp-02@2x.png",
+  "grade_short": "小三到小六",
+  "grade_source": "頁內「適合對象：小三到小六」"
 }

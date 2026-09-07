@@ -131,6 +131,26 @@ export function comparisonTable(camp) {
   return `<table>${head}${fit}${row("營隊<br/>特色", "features")}${row("學習<br/>技能", "skills")}${row("成果<br/>收穫", "outcome")}</table>`;
 }
 
+// 「其他營隊」內鏈區塊：每頁列出其他營隊，依年級由小到大排，方便家長找到對的年齡。
+// 目的有兩個：①家長進錯頁時有地方去（營隊頁每月 6,700 次點擊，這些人已經有意願）
+//             ②讓 Google 知道這 9 頁是同一群，權重才流得動。
+// 🔴 本季不開的營隊（not_running: true）只在 linked_from 指定的頁面出現，
+//    避免把家長大量導到一個不能報名的頁；但保留一條連結養住它的排名。
+export function otherCampsBlock(camp, allCamps) {
+  const others = allCamps
+    .filter((c) => c.slug !== camp.slug)
+    .filter((c) => !c.not_running || (c.linked_from || []).includes(camp.slug));
+  if (others.length === 0) return "";
+  const items = others.map((c) =>
+    `<li><a href="/camps/${c.slug}">${esc(c.name)}</a>` +
+    `<span class="oa-oc-grade">${esc(c.grade_short || "")}</span></li>`
+  ).join("");
+  return '<section class="oa-other-camps"><div class="oa-oc-inner">' +
+    "<h3>其他營隊</h3>" +
+    '<p class="oa-oc-lead">孩子的年級或興趣不同？這一季還有這些選擇：</p>' +
+    `<ul>${items}</ul></div></section>`;
+}
+
 export function buildAll({ quiet = false } = {}) {
   const { common, template } = readSources();
   if (existsSync(OUTPUT_DIR)) rmSync(OUTPUT_DIR, { recursive: true });
@@ -138,14 +158,18 @@ export function buildAll({ quiet = false } = {}) {
   cpSync(join(ROOT, "assets"), join(OUTPUT_DIR, "assets"), { recursive: true });
   cpSync(join(ROOT, "templates", "css"), join(OUTPUT_DIR, "css"), { recursive: true });
 
+  const GRADE_ORDER = ["stemkids", "financial_quotient", "minecraft", "roblox", "python", "ainteraction", "gai", "apcs", "online"];
+  const allCamps = campFiles().map(readCamp)
+    .sort((a, b) => GRADE_ORDER.indexOf(a.slug) - GRADE_ORDER.indexOf(b.slug));
+
   const results = [];
-  for (const file of campFiles()) {
-    const camp = readCamp(file);
+  for (const camp of allCamps) {
     const bodyPath = join(ROOT, "templates", "bodies", camp.body);
-    if (!existsSync(bodyPath)) throw new Error(`${file}: 找不到 body 檔 ${camp.body}`);
+    if (!existsSync(bodyPath)) throw new Error(`${camp.slug}: 找不到 body 檔 ${camp.body}`);
     const table = comparisonTable(camp);
     let body = applySeason(readFileSync(bodyPath, "utf8"), common);
     if (table) body = body.replace(/\{\{COMPARISON_DESKTOP\}\}/g, table).replace(/\{\{COMPARISON_MOBILE\}\}/g, table);
+    body = body.replace(/\{\{OTHER_CAMPS\}\}/g, otherCampsBlock(camp, allCamps));
     const title = applySeason(camp.meta.title, common) + " — 橘子蘋果程式學苑";
     const description = applySeason(camp.meta.description, common);
     const url = pageUrl(camp.slug);

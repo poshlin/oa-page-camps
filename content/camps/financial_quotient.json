@@ -9,7 +9,7 @@
   "courses_for_schema": [
     {
       "name": "財商數學創客營",
-      "grade": "國小三年級至六年級",
+      "grade": "國小二年級至三年級",
       "description": "把理財觀念與數學結合，透過打造夢想商店的實作，學習預算、定價與儲蓄。"
     }
   ],
@@ -20,5 +20,7 @@
       "理財"
     ]
   },
-  "og_image": "financial_quotient/og_image.png"
+  "og_image": "financial_quotient/og_image.png",
+  "grade_short": "小二到小三",
+  "grade_source": "頁內三處：適合對象、「財商數學創客營適合誰？」段、積木段"
 }
