@@ -76,8 +76,8 @@ function buildGraph({ camp, common, title, description, url }) {
     "@id": `${SITE}/#organization`,
     name: "橘子蘋果程式學苑",
     url: `${SITE}/`,
-    logo: `${SITE}/logo-2023-color.svg`,
-    foundingDate: "2012",
+    logo: `${SITE}/logo.png`,
+    foundingDate: "2013-03-01",
     sameAs: [
       "https://www.facebook.com/OrangeApplePad",
       "https://www.instagram.com/orangeapple.tw/",
